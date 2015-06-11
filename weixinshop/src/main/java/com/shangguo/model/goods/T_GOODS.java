@@ -7,14 +7,13 @@ import java.util.Date;
  * T_GOODS 实体类 Tue Jun 09 22:06:30 CST 2015 JasonLin
  */
 
-public class T_GOODS implements Serializable{
+public class T_GOODS implements Serializable {
 
 	private static final long serialVersionUID = 2166319205766057857L;
 	private int goods_id;
 	private int gategory_id;
-	private String godds_name;
+	private String goods_name;
 	private int goods_order;
-	private double price;
 	private double original_price;
 	private double present_price;
 	private double order_price;
@@ -43,12 +42,12 @@ public class T_GOODS implements Serializable{
 		return gategory_id;
 	}
 
-	public void setGodds_name(String godds_name) {
-		this.godds_name = godds_name;
+	public void setGoods_name(String goods_name) {
+		this.goods_name = goods_name;
 	}
 
-	public String getGodds_name() {
-		return godds_name;
+	public String getGoods_name() {
+		return goods_name;
 	}
 
 	public void setGoods_order(int goods_order) {
@@ -57,14 +56,6 @@ public class T_GOODS implements Serializable{
 
 	public int getGoods_order() {
 		return goods_order;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public double getPrice() {
-		return price;
 	}
 
 	public void setOriginal_price(double original_price) {

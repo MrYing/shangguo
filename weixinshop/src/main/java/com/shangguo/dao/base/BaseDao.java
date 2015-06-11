@@ -12,13 +12,13 @@ import java.util.Map;
  */
 public interface BaseDao<T> {
 
-	void save(T entity);
+	int save(T entity, String id_name);
 
-	void update(T entity, String id_name);
+	int update(T entity, String id_name);
 
-	void delete(T entity, String id_name);
+	int delete(T entity, String id_name);
 
-	void delete(int id, String id_name);
+	int delete(int id, String id_name);
 
 	void batchSave(List<T> list);
 
