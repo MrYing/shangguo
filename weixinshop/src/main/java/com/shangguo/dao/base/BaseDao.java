@@ -1,6 +1,5 @@
 package com.shangguo.dao.base;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,13 +11,13 @@ import java.util.Map;
  */
 public interface BaseDao<T> {
 
-	void save(T entity);
+	int save(T entity, String id_name);
 
-	void update(T entity, String id_name);
+	int update(T entity, String id_name);
 
-	void delete(T entity, String id_name);
+	int delete(T entity, String id_name);
 
-	void delete(int id, String id_name);
+	int delete(int id, String id_name);
 
 	void batchSave(List<T> list);
 
@@ -26,7 +25,7 @@ public interface BaseDao<T> {
 
 	void batchDelete(List<T> list);
 
-	T findById(Serializable id, String id_name);
+	T findById(int id, String id_name);
 
 	List<T> findAll();
 
