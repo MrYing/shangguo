@@ -27,8 +27,6 @@ alert("hello, jquery");
 </head> 
 
 <body> 
-<p class="error"><%=basePath%></p> <br>
-<%=path%><br>
-${pageContext.request.contextPath}
+尚果
 </body> 
 </html> 
