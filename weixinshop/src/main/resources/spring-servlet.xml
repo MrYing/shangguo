@@ -11,6 +11,17 @@
        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd     
        http://www.springframework.org/schema/context   
        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+       
+       <!-- <mvc:resources mapping="/demo/**" location="/jquery-easyui-1.3.3/demo/"/>  
+       <mvc:resources mapping="/themes/**" location="/jquery-easyui-1.3.3/themes/"/>  
+       <mvc:resources mapping="/locale/**" location="/jquery-easyui-1.3.3/locale/"/> -->
+       <mvc:resources mapping="/images/**" location="/images/"/>
+       <mvc:resources mapping="/css/**" location="/css/"/>
+       <!-- <mvc:resources mapping="/common/**" location="/common/"/> -->
+       <!-- <mvc:resources mapping="/js/**" location="/js/"/> -->
+       <mvc:resources mapping="/easyui/**" location="/easyui/"/>
+       <mvc:resources mapping="/jquery-easyui-1.3.3/**" location="/jquery-easyui-1.3.3/"/>
+       
        <!-- handlermapping -->
        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
        <!-- handleradapter -->
