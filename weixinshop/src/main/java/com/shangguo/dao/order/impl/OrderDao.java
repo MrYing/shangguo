@@ -1,33 +1,30 @@
-package com.shangguo.dao.goods.impl;
+package com.shangguo.dao.order.impl;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Repository;
-
 import com.shangguo.dao.base.BaseDaoImpl;
 import com.shangguo.dao.base.QueryResult;
-import com.shangguo.dao.goods.IGoodsDao;
-import com.shangguo.model.goods.T_GOODS;
+import com.shangguo.dao.order.IOrderDao;
+import com.shangguo.model.order.T_order;
 
-@Repository
-public class GoodsDao extends BaseDaoImpl<T_GOODS> implements IGoodsDao {
+public class OrderDao extends BaseDaoImpl<T_order> implements IOrderDao {
 
-	private String id_name = "goods_id";
+	private String id_name = "order_id";
 
-	public int save(T_GOODS entity) {
+	public int save(T_order entity) {
 		return super.save(entity, id_name);
 
 	}
 
-	public int update(T_GOODS entity) {
-		exists_id(entity.getGoods_id());
+	public int update(T_order entity) {
+		exists_id(entity.getOrder_id());
 		return super.update(entity, id_name);
 	}
 
-	public int delete(T_GOODS entity) {
-		exists_id(entity.getGoods_id());
+	public int delete(T_order entity) {
+		exists_id(entity.getOrder_id());
 		return super.delete(entity, id_name);
 	}
 
@@ -36,37 +33,37 @@ public class GoodsDao extends BaseDaoImpl<T_GOODS> implements IGoodsDao {
 		return super.delete(id, id_name);
 	}
 
-	public void batchSave(List<T_GOODS> list) {
+	public void batchSave(List<T_order> list) {
 		super.batchSave(list);
 	}
 
-	public void batchUpdate(List<T_GOODS> list) {
+	public void batchUpdate(List<T_order> list) {
 		super.batchUpdate(list);
 	}
 
-	public void batchDelete(List<T_GOODS> list) {
+	public void batchDelete(List<T_order> list) {
 		super.batchDelete(list);
 	}
 
-	public T_GOODS findById(int id) {
+	public T_order findById(int id) {
 		exists_id(id);
 		return super.findById(id, id_name);
 	}
 
-	public List<T_GOODS> findAll() {
+	public List<T_order> findAll() {
 		return super.findAll();
 	}
 
-	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize) {
+	public QueryResult<T_order> findByPage(int pageNo, int pageSize) {
 		return super.findByPage(pageNo, pageSize);
 	}
 
-	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize,
+	public QueryResult<T_order> findByPage(int pageNo, int pageSize,
 			Map<String, String> where) {
 		return super.findByPage(pageNo, pageSize, where);
 	}
 
-	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize,
+	public QueryResult<T_order> findByPage(int pageNo, int pageSize,
 			LinkedHashMap<String, String> orderby) {
 		return super.findByPage(pageNo, pageSize, orderby);
 	}

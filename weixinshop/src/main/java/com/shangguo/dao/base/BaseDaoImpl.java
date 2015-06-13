@@ -101,6 +101,12 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				+ id_name + "=?";
 		return jdbcTemplate.update(sql, id);
 	}
+	
+
+	public int query(String sql, Object... args) {
+		return jdbcTemplate.update(sql, args);
+	}
+	
 
 	/**
 	 * 未完成
