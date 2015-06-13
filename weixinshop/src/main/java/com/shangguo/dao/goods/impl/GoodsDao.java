@@ -9,11 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import com.shangguo.dao.base.BaseDaoImpl;
 import com.shangguo.dao.base.QueryResult;
-import com.shangguo.dao.goods.GoodsDao;
+import com.shangguo.dao.goods.IGoodsDao;
 import com.shangguo.model.goods.T_GOODS;
 
 @Repository
-public class GoodsDaoImpl extends BaseDaoImpl<T_GOODS> implements GoodsDao {
+public class GoodsDao extends BaseDaoImpl<T_GOODS> implements IGoodsDao {
 
 	private String id_name = "goods_id";
 
