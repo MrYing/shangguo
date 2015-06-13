@@ -26,7 +26,7 @@ public interface BaseDao<T> {
 
 	void batchDelete(List<T> list);
 
-	T findById(Serializable id, String id_name);
+	T findById(int id, String id_name);
 
 	List<T> findAll();
 

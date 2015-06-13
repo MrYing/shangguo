@@ -10,22 +10,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /**
  * 
  */
+
 public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	/** 设置一些操作的常量 */
 	public static final String SQL_INSERT = "insert";
 	public static final String SQL_UPDATE = "update";
 	public static final String SQL_DELETE = "delete";
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+
+	private JdbcTemplate jdbcTemplate = new JdbcTemplate();;
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -35,6 +36,12 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	@SuppressWarnings("unchecked")
 	public BaseDaoImpl() {
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setDriverClassName("com.mysql.jdbc.Driver");
+		ds.setUrl("jdbc:mysql://localhost:3306/wxshop?useUnicode=true&characterEncoding=utf8");
+		ds.setUsername("root");
+		ds.setPassword("root");
+		jdbcTemplate.setDataSource(ds);
 		System.out.println(getClass().toString());
 		ParameterizedType type = (ParameterizedType) getClass()
 				.getGenericSuperclass();
@@ -59,7 +66,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	public int save(T entity, String id_name) {
 		exists_id_name(id_name);
-		System.out.println("+++++++++++++");
+		System.out.println("++++save+++++");
 		String sql = this.makeSql(SQL_INSERT, id_name);
 		System.out.println(sql);
 		Object[] args = this.setArgs(entity, SQL_INSERT, id_name);
@@ -69,7 +76,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	public int update(T entity, String id_name) {
-		System.out.println("/////////////////");
+		System.out.println("++++update+++++");
 		exists_id_name(id_name);
 		String sql = this.makeSql(SQL_UPDATE, id_name);
 		System.out.println(sql);
@@ -79,7 +86,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	public int delete(T entity, String id_name) {
-		System.out.println("-----------------");
+		System.out.println("++++delete+++++");
 		exists_id_name(id_name);
 		String sql = this.makeSql(SQL_DELETE, id_name);
 		System.out.println(sql);
@@ -119,7 +126,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	}
 
-	public T findById(Serializable id, String id_name) {
+	public T findById(int id, String id_name) {
 		exists_id_name(id_name);
 		String sql = "SELECT * FROM " + entityClass.getSimpleName()
 				+ "  WHERE " + id_name + "=? ";
@@ -188,7 +195,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			for (int i = 0; fields != null && i < fields.length; i++) {
 				fields[i].setAccessible(true); // 暴力反射
 				String column = fields[i].getName();
-				if (column.equals(id_name) || "serialVersionUID".equals(column)) { // 传入主键名称
+				if ("serialVersionUID".equals(column)) { // 传入主键名称
 					continue;
 				}
 
@@ -200,7 +207,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			sql.append(" DELETE FROM " + entityClass.getSimpleName()
 					+ " WHERE " + id_name + "=? ");
 		}
-		System.out.println("SQL=" + sql);
+		System.out.println("执行SQL=" + sql);
 		return sql.toString();
 
 	}
@@ -227,29 +234,70 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 					e.printStackTrace();
 				}
 			}
+			// 打印参数
+			StringBuffer argsString = new StringBuffer();
+			argsString.append("参数：");
+			for (Object oj : argLlist) {
+				if (oj == null)
+					argsString.append("null,");
+				else
+					argsString.append(oj.toString() + ",");
+			}
+			argsString = argsString.deleteCharAt(argsString.length() - 1);
+			System.out.println(argsString);
+
 			return argLlist.toArray();
 		} else if (sqlFlag.equals(SQL_UPDATE)) {
 			ArrayList<Object> argLlist = new ArrayList<Object>();
 			int length = fields.length;
 			// Object[] tempArr = new Object[fields.length];
+//			for (int i = 0; length > 0 && i < length; i++) {
+//				try {
+//					fields[i].setAccessible(true); // 暴力反射
+//					// tempArr[i] = fields[i].get(entity);
+//					String column = fields[i].getName();
+//					if (column.equals(id_name)
+//							|| "serialVersionUID".equals(column)) { // 传入主键名称
+//						continue;
+//					}
+//					argLlist.add(fields[i].get(entity));
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//			
+			Object temp_idvalue = new Object();
 			for (int i = 0; length > 0 && i < length; i++) {
 				try {
 					fields[i].setAccessible(true); // 暴力反射
-					// tempArr[i] = fields[i].get(entity);
 					String column = fields[i].getName();
-					if (column.equals(id_name)
-							|| "serialVersionUID".equals(column)) { // 传入主键名称
+					if ("serialVersionUID".equals(column))
 						continue;
-					}
+
+					if (column.equals(id_name))
+						temp_idvalue = fields[i].get(entity);
+
 					argLlist.add(fields[i].get(entity));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			// Object[] args = new Object[fields.length];
-			// System.arraycopy(tempArr, 1, args, 0, tempArr.length - 1); //
-			// 数组拷贝
-			// args[args.length - 1] = tempArr[0];
+			argLlist.add(temp_idvalue);
+			
+			
+			// 打印参数
+			StringBuffer argsString = new StringBuffer();
+			argsString.append("参数：");
+			for (Object oj : argLlist) {
+				if (oj == null)
+					argsString.append("null,");
+				else
+					argsString.append(oj.toString() + ",");
+			}
+			argsString = argsString.deleteCharAt(argsString.length() - 1);
+
+			System.out.println(argsString);
+
 			return argLlist.toArray();
 		} else if (sqlFlag.equals(SQL_DELETE)) {
 			Object[] args = new Object[1]; // 长度是1
@@ -267,6 +315,16 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				}
 			}
 
+			StringBuffer argsString = new StringBuffer();
+			argsString.append("参数：");
+			for (Object oj : args) {
+				if (oj == null)
+					argsString.append("null,");
+				else
+					argsString.append(oj.toString() + ",");
+			}
+			argsString = argsString.deleteCharAt(argsString.length() - 1);
+			System.out.println(argsString);
 			return args;
 		}
 		return null;
