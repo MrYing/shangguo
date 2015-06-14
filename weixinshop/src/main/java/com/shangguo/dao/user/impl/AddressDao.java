@@ -11,7 +11,7 @@ import com.shangguo.model.user.T_address;
 
 public class AddressDao extends BaseDaoImpl<T_address> implements IAddressDao {
 
-	private String id_name = "adress_id";
+	private String id_name = "address_id";
 
 	public int save(T_address entity) {
 		return super.save(entity, id_name);
