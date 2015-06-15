@@ -19,7 +19,7 @@ import com.shangguo.service.systemadmin.LoginInterceptor;
 @Controller
 public class LoginController {
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = "/logins", method = RequestMethod.GET)
 	public ModelAndView login(String redirectURL, HttpServletRequest request) {
 		ModelAndView view = new ModelAndView();
 		// 把拦截前路径存下来，以便登入成功可以直接请求到登录前的页面
@@ -29,23 +29,26 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
-    public String submit(String username, String password, String redirectURL,
+    public String submit(String userName, String password, String redirectURL,
             HttpServletRequest request) {
         //模拟登陆成功 用户admin 密码admin的用户
-        if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)
-                && username.equals("admin") && password.equals("admin")) {
+       /* if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)
+                && userName.equals("admin") && password.equals("admin")) {*/
+		
+		if(userName.equals("admin") && password.equals("admin")){
             //当登陆成功是，将用户信息存放到session中去
+			System.out.println("密码正确！");
             HttpSession session = request.getSession();
             session.setAttribute(LoginInterceptor.SEESION_MEMBER, "admin");
             if (StringUtils.isNotBlank(redirectURL)) {
                 return "redirect:" + URLDecoder.decode(redirectURL);
             }
-            return "redirect:/admin/main";
+            return "/admin/main";
         } else {
             if (StringUtils.isNotBlank(redirectURL)) {
-                return "redirect:/admin/login" + URLDecoder.decode(redirectURL);
+                return "redirect:/login.jsp" + URLDecoder.decode(redirectURL);
             }
-            return "redirect:/admin/login";
+            return "redirect:/login.jsp";
         }
     }
 	

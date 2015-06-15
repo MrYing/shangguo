@@ -45,15 +45,15 @@
 		<em class="corner rt"></em>
 		<div class="box">
 			<h1>管理员登陆</h1>
-			<form id="loginForm" method="post" action="${pageContext.request.contextPath}/user_login.action" onsubmit="return checkForm()">
+			<form id="loginForm" method="post" action="submit"">
 				<table>
 					<tr>
 						<td class="field">用户名：</td>
-						<td><input class="text" type="text" id="userName" name="user.userName"  value="${user.userName }" /><span></span></td>
+						<td><input class="text" type="text" id="userName" name="userName"  <%-- value="${user.userName }" --%> /><span></span></td>
 					</tr>
 					<tr>
 						<td class="field">登录密码：</td>
-						<td><input class="text" type="password" id="password" name="user.password"  value="${user.password }"/><span></span></td>
+						<td><input class="text" type="password" id="password" name="password"  <%-- value="${user.password }" --%>/><span></span></td>
 					</tr>
 					<tr>
 						<td class="field">验证码：</td>

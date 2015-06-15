@@ -30,15 +30,19 @@
 
 		<!-- 设定Spring 去哪些包中找Annotation -->
 		<context:component-scan base-package="com.shangguo" />
-
-	    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">  
-	        <!-- 返回的视图模型数据需要经过jstl来处理 -->  
-	        <property name="viewClass"  
-	            value="org.springframework.web.servlet.view.JstlView" />  
-	        <property name="prefix" value="/WEB-INF/backadmin/" />  
-	        <property name="suffix" value=".jsp" />  
-	    </bean>
-
+		
+	<!-- mvc返回页面的配置 -->
+		<bean id="viewResolver"
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+			<!-- 模板路径为WEB-INF/pages/ -->
+			<property name="prefix">
+				<value>/WEB-INF/backadmin/</value>
+			</property>
+			<!-- 视图模板后缀为.JSP -->
+			<property name="suffix">
+				<value>.jsp</value>
+			</property>
+		</bean>
 		<!-- handlermapping -->
 		<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
