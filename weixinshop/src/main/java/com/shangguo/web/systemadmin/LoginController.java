@@ -17,14 +17,16 @@ import com.shangguo.service.systemadmin.LoginInterceptor;
  * @author JabnMai 2015-6-14
  */
 @Controller
+@RequestMapping("adminlogin")
 public class LoginController {
 	
-	@RequestMapping(value = "/logins", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(String redirectURL, HttpServletRequest request) {
 		ModelAndView view = new ModelAndView();
 		// 把拦截前路径存下来，以便登入成功可以直接请求到登录前的页面
 		view.addObject("redirectURL", redirectURL);
 		view.setViewName("/login");
+		System.out.println("login:" +redirectURL);
 		return view;
 	}
 	
@@ -32,6 +34,7 @@ public class LoginController {
     public String submit(String userName, String password, String redirectURL,
             HttpServletRequest request) {
         //模拟登陆成功 用户admin 密码admin的用户
+
        /* if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)
                 && userName.equals("admin") && password.equals("admin")) {*/
 		
@@ -41,6 +44,7 @@ public class LoginController {
             HttpSession session = request.getSession();
             session.setAttribute(LoginInterceptor.SEESION_MEMBER, "admin");
             if (StringUtils.isNotBlank(redirectURL)) {
+            	System.out.println(URLDecoder.decode(redirectURL));
                 return "redirect:" + URLDecoder.decode(redirectURL);
             }
             return "/admin/main";

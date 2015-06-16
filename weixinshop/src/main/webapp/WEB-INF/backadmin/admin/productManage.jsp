@@ -264,12 +264,21 @@
 	  closed="true" buttons="#dlg-buttons">
 	 	<form id="fm" method="post" enctype="multipart/form-data">
 	 		<table cellspacing="8px">
+	 		   
 	 			<tr>
 	 				<td>商品名称：</td>
 	 				<td colspan="4"><input type="text" id="name" name="product.name" class="easyui-validatebox" required="true" style="width: 300px"/></td>
 	 			</tr>
+	 			 <tr>
+	 				<td>商品ID：</td>
+	 				<td colspan="4"><input type="text" id="price" name="product.price" class="easyui-validatebox" required="true"/></td>
+	 			</tr>
 	 			<tr>
-	 				<td>价格：</td>
+	 				<td>原价：</td>
+	 				<td colspan="4"><input type="text" id="price" name="product.price" class="easyui-validatebox" required="true"/></td>
+	 			</tr>
+	 			<tr>
+	 				<td>现价：</td>
 	 				<td colspan="4"><input type="text" id="price" name="product.price" class="easyui-validatebox" required="true"/></td>
 	 			</tr>
 	 			<tr>
@@ -277,30 +286,23 @@
 	 				<td colspan="4"><input type="text" id="stock" name="product.stock" class="easyui-validatebox" required="true"/></td>
 	 			</tr>
 	 			<tr>
+	 				<td>商品状态：</td>
+	 				<td colspan="4"><input type="text" id="stock" name="product.stock" class="easyui-validatebox" required="true"/></td>
+	 			</tr>
+	 			<tr>
 	 				<td>商品图片：</td>
 	 				<td colspan="4"><input type="file" id="pP" name="proPic" /></td>
 	 			</tr>
 	 			<tr>
-	 				<td>所属大类：</td>
+	 				<td>商品类别：</td>
 	 				<td colspan="4">
 	 					<input class="easyui-combobox" id="bName" name="product.bigType.id" data-options="panelHeight:'auto',editable:false,valueField:'id',textField:'name',url:'productBigType_comboList.action'"/>
 	 				</td>
 	 			</tr>
 	 			<tr>
-	 				<td>所属小类：</td>
-	 				<td colspan="4">
-	 					<input class="easyui-combobox" id="sName" name="product.smallType.id" data-options="panelHeight:'auto',editable:false,valueField:'id',textField:'name',url:'productSmallType_comboList.action'"/>
-	 				</td>
-	 			</tr>
-	 			<tr>
-	 				<td valign="top">备注：</td>
+	 				<td valign="top">商品描述：</td>
 	 				<td colspan="4">
 	 					<textarea rows="5" cols="50" id="description" name="product.description"></textarea>
-	 					<input type="hidden" id="proPic" name="product.proPic"/>
-	 					<input type="hidden" id="hot" name="product.hot"/>
-	 					<input type="hidden" id="hotTime" name="product.hotTime"/>
-	 					<input type="hidden" id="specialPrice" name="product.specialPrice"/>
-	 					<input type="hidden" id="specialPriceTime" name="product.specialPriceTime"/>
 	 				</td>
 	 			</tr>
 	 		</table>

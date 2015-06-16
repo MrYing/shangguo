@@ -45,7 +45,7 @@
 		<em class="corner rt"></em>
 		<div class="box">
 			<h1>管理员登陆</h1>
-			<form id="loginForm" method="post" action="submit"">
+			<form id="loginForm" method="post" action="adminlogin/submit">
 				<table>
 					<tr>
 						<td class="field">用户名：</td>
@@ -53,7 +53,7 @@
 					</tr>
 					<tr>
 						<td class="field">登录密码：</td>
-						<td><input class="text" type="password" id="password" name="password"  <%-- value="${user.password }" --%>/><span></span></td>
+						<td><input class="text" type="password" id="password" name="password" <%--  value="${password}" --%>/><span></span></td>
 					</tr>
 					<tr>
 						<td class="field">验证码：</td>
