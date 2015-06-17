@@ -44,8 +44,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             //被拦截，重定向到login界面
             response.sendRedirect(contextPath+"/login.jsp?redirectURL="
                     + URLEncoder.encode(url));
+            System.out.println("用户名密码为空");
             return false;
         }
+        System.out.println("用户名密码为空");
         return true;
     }
 

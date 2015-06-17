@@ -42,7 +42,7 @@ public class LoginController {
             //当登陆成功是，将用户信息存放到session中去
 			System.out.println("密码正确！");
             HttpSession session = request.getSession();
-            session.setAttribute(LoginInterceptor.SEESION_MEMBER, "admin");
+            session.setAttribute("isLogin", true);
             if (StringUtils.isNotBlank(redirectURL)) {
             	System.out.println(URLDecoder.decode(redirectURL));
                 return "redirect:" + URLDecoder.decode(redirectURL);

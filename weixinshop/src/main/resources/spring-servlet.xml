@@ -19,14 +19,14 @@
        <mvc:resources mapping="/easyui/**" location="/easyui/"/>
       
         <!--  配置mvc的拦截器 可以配置多个 -->
-	    <mvc:interceptors>
+	    <!-- <mvc:interceptors>
 	        <mvc:interceptor>
-	            <!--  需要被拦截的路径 -->
-	            <mvc:mapping path="/backadmin/**"/>
-	            <!-- 拦截处理的interceptor -->
+	             需要被拦截的路径
+	            <mvc:mapping path="/adminlogin/**"/>
+	            拦截处理的interceptor
 	            <bean class="com.shangguo.service.systemadmin.LoginInterceptor"/>
-	            </mvc:interceptor>
-	    </mvc:interceptors>
+	        </mvc:interceptor>
+	    </mvc:interceptors> -->
 
 		<!-- 设定Spring 去哪些包中找Annotation -->
 		<context:component-scan base-package="com.shangguo" />
