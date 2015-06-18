@@ -1,5 +1,6 @@
 package com.shangguo.dao.goods.impl;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +70,16 @@ public class GoodsDao extends BaseDaoImpl<T_GOODS> implements IGoodsDao {
 	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize,
 			LinkedHashMap<String, String> orderby) {
 		return super.findByPage(pageNo, pageSize, orderby);
+	}
+
+	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize,
+			Map<String, String> where, LinkedHashMap<String, String> orderby) {
+		return super.findByPage(pageNo, pageSize, where, orderby);
+	}
+
+	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize,
+			String findsql, ArrayList<Object> param) {
+		return super.findByPage(pageNo, pageSize, findsql, param);
 	}
 
 	private void exists_id(int id) {

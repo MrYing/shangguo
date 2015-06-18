@@ -1,6 +1,5 @@
 package com.shangguo.dao.base;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Types;
@@ -101,12 +100,17 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				+ id_name + "=?";
 		return jdbcTemplate.update(sql, id);
 	}
-	
 
-	public int query(String sql, Object... args) {
-		return jdbcTemplate.update(sql, args);
+	/**
+	 * 不分页
+	 * 
+	 * @param sql
+	 * @param args
+	 * @return
+	 */
+	public int query(String sql, ArrayList<Object> param) {
+		return jdbcTemplate.update(sql, param.toArray());
 	}
-	
 
 	/**
 	 * 未完成
@@ -132,6 +136,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	}
 
+	/**
+	 * 根据id查询
+	 */
 	public T findById(int id, String id_name) {
 		exists_id_name(id_name);
 		String sql = "SELECT * FROM " + entityClass.getSimpleName()
@@ -140,18 +147,42 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return jdbcTemplate.query(sql, rowMapper, id).get(0);
 	}
 
+	/**
+	 * 全表查询
+	 */
 	public List<T> findAll() {
 		String sql = "SELECT * FROM " + entityClass.getSimpleName();
 		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
+		List<T> list = jdbcTemplate.query(sql, rowMapper);
 		return jdbcTemplate.query(sql, rowMapper);
 	}
 
+	/**
+	 * 查询条件加排序条件
+	 * 
+	 * @param pageNo
+	 *            当前页
+	 * @param pageSize
+	 *            页面大小
+	 * @return
+	 */
 	public QueryResult<T> findByPage(int pageNo, int pageSize) {
 		List<T> list = this.find(pageNo, pageSize, null, null);
 		int totalRow = this.count(null);
 		return new QueryResult<T>(list, totalRow);
 	}
 
+	/**
+	 * 查询条件加排序条件
+	 * 
+	 * @param pageNo
+	 *            当前页
+	 * @param pageSize
+	 *            页面大小
+	 * @param where
+	 *            查询条件（第一个放属性名字，第二个放属性值）
+	 * @return
+	 */
 	public QueryResult<T> findByPage(int pageNo, int pageSize,
 			Map<String, String> where) {
 		List<T> list = this.find(pageNo, pageSize, where, null);
@@ -159,6 +190,17 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return new QueryResult<T>(list, totalRow);
 	}
 
+	/**
+	 * 查询条件加排序条件
+	 * 
+	 * @param pageNo
+	 *            当前页
+	 * @param pageSize
+	 *            页面大小
+	 * @param orderby
+	 *            排序条件（在key里面放排序字段就行，多个排序用多个）
+	 * @return
+	 */
 	public QueryResult<T> findByPage(int pageNo, int pageSize,
 			LinkedHashMap<String, String> orderby) {
 		List<T> list = this.find(pageNo, pageSize, null, orderby);
@@ -166,10 +208,42 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return new QueryResult<T>(list, totalRow);
 	}
 
+	/**
+	 * 查询条件加排序条件
+	 * 
+	 * @param pageNo
+	 *            当前页
+	 * @param pageSize
+	 *            页面大小
+	 * @param where
+	 *            查询条件（第一个放属性名字，第二个放属性值）
+	 * @param orderby
+	 *            排序条件（在key里面放排序字段就行，多个排序用多个）
+	 * @return
+	 */
 	public QueryResult<T> findByPage(int pageNo, int pageSize,
 			Map<String, String> where, LinkedHashMap<String, String> orderby) {
 		List<T> list = this.find(pageNo, pageSize, where, orderby);
 		int totalRow = this.count(where);
+		return new QueryResult<T>(list, totalRow);
+	}
+
+	/**
+	 * 
+	 * @param pageNo
+	 *            当前页
+	 * @param pageSize
+	 *            页面大小
+	 * @param findsql
+	 *            查询语句
+	 * @param findargs
+	 *            查询参数
+	 * @return
+	 */
+	public QueryResult<T> findByPage(int pageNo, int pageSize, String findsql,
+			ArrayList<Object> param) {
+		List<T> list = this.normalFind(pageNo, pageSize, findsql, param);
+		int totalRow = this.normalCount(findsql, param);
 		return new QueryResult<T>(list, totalRow);
 	}
 
@@ -257,21 +331,21 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			ArrayList<Object> argLlist = new ArrayList<Object>();
 			int length = fields.length;
 			// Object[] tempArr = new Object[fields.length];
-//			for (int i = 0; length > 0 && i < length; i++) {
-//				try {
-//					fields[i].setAccessible(true); // 暴力反射
-//					// tempArr[i] = fields[i].get(entity);
-//					String column = fields[i].getName();
-//					if (column.equals(id_name)
-//							|| "serialVersionUID".equals(column)) { // 传入主键名称
-//						continue;
-//					}
-//					argLlist.add(fields[i].get(entity));
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//			
+			// for (int i = 0; length > 0 && i < length; i++) {
+			// try {
+			// fields[i].setAccessible(true); // 暴力反射
+			// // tempArr[i] = fields[i].get(entity);
+			// String column = fields[i].getName();
+			// if (column.equals(id_name)
+			// || "serialVersionUID".equals(column)) { // 传入主键名称
+			// continue;
+			// }
+			// argLlist.add(fields[i].get(entity));
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
+			// }
+			//
 			Object temp_idvalue = new Object();
 			for (int i = 0; length > 0 && i < length; i++) {
 				try {
@@ -289,8 +363,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				}
 			}
 			argLlist.add(temp_idvalue);
-			
-			
+
 			// 打印参数
 			StringBuffer argsString = new StringBuffer();
 			argsString.append("参数：");
@@ -416,15 +489,14 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			LinkedHashMap<String, String> orderby) {
 		// where 与 order by 要写在select * from table 的后面，而不是where rownum<=? )
 		// where rn>=?的后面
-		StringBuffer sql = new StringBuffer(
-				" SELECT * FROM (SELECT t.*,ROWNUM rn FROM (SELECT * FROM "
-						+ entityClass.getSimpleName());
+		StringBuffer sql = new StringBuffer(" SELECT t.* FROM (SELECT * FROM "
+				+ entityClass.getSimpleName());
 		if (where != null && where.size() > 0) {
 			sql.append(" WHERE "); // 注意不是where
 			for (Map.Entry<String, String> me : where.entrySet()) {
 				String columnName = me.getKey();
 				String columnValue = me.getValue();
-				sql.append(columnName).append(" ").append(columnValue)
+				sql.append(columnName).append("=").append(columnValue)
 						.append(" AND "); // 没有考虑or的情况
 			}
 			int endIndex = sql.lastIndexOf("AND");
@@ -442,11 +514,64 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			sql = sql.deleteCharAt(sql.length() - 1);
 		}
-		sql.append(" ) t WHERE ROWNUM<=? ) WHERE rn>=? ");
+		sql.append(" ) t LIMIT ?,? ");
 		System.out.println("SQL=" + sql);
-		Object[] args = { pageNo * pageSize, (pageNo - 1) * pageSize + 1 };
+		Object[] args = { (pageNo - 1) * pageSize, pageNo * pageSize };
+		// 打印参数
+		StringBuffer argsString = new StringBuffer();
+		argsString.append("参数：");
+		for (Object oj : args) {
+			if (oj == null)
+				argsString.append("null,");
+			else
+				argsString.append(oj.toString() + ",");
+		}
+		argsString = argsString.deleteCharAt(argsString.length() - 1);
+		System.out.println(argsString);
 		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
 		return jdbcTemplate.query(sql.toString(), args, rowMapper);
+	}
+
+	private List<T> normalFind(int pageNo, int pageSize, String findsql,
+			ArrayList<Object> param) {
+		// where 与 order by 要写在select * from table 的后面，而不是where rownum<=? )
+		// where rn>=?的后面
+		StringBuffer sql = new StringBuffer(" SELECT t.* FROM (");
+		sql.append(findsql);
+
+		sql.append(" ) t LIMIT ?,? ");
+		System.out.println("SQL=" + sql);
+		// 组装参数
+		int argLength = param.size();
+		Object[] args = new Object[argLength + 2];
+		for (int i = 0; argLength > 0 && i < argLength; i++) {
+			args[i] = param.get(i);
+		}
+		args[argLength] = (pageNo - 1) * pageSize;
+		args[argLength + 1] = pageNo * pageSize;
+		// 打印参数
+		StringBuffer argsString = new StringBuffer();
+		argsString.append("参数：");
+		for (Object oj : args) {
+			if (oj == null)
+				argsString.append("null,");
+			else
+				argsString.append(oj.toString() + ",");
+		}
+		argsString = argsString.deleteCharAt(argsString.length() - 1);
+		System.out.println(argsString);
+		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
+		return jdbcTemplate.query(sql.toString(), args, rowMapper);
+	}
+
+	private int normalCount(String findsql, ArrayList<Object> param) {
+
+		StringBuffer sql = new StringBuffer(" SELECT COUNT(*) FROM ( ");
+		sql.append(findsql);
+		sql.append(" ) t ");
+		System.out.println("normalcountSQL=" + sql);
+		return jdbcTemplate.queryForInt(sql.toString(), param.toArray());
+
 	}
 
 	private int count(Map<String, String> where) {
@@ -457,7 +582,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			for (Map.Entry<String, String> me : where.entrySet()) {
 				String columnName = me.getKey();
 				String columnValue = me.getValue();
-				sql.append(columnName).append(" ").append(columnValue)
+				sql.append(columnName).append("=").append(columnValue)
 						.append(" AND "); // 没有考虑or的情况
 			}
 			int endIndex = sql.lastIndexOf("AND");
@@ -465,7 +590,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 				sql = new StringBuffer(sql.substring(0, endIndex));
 			}
 		}
-		System.out.println("SQL=" + sql);
+		System.out.println("countSQL=" + sql);
 		return jdbcTemplate.queryForInt(sql.toString());
 	}
 
