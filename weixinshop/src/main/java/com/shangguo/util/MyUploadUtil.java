@@ -102,7 +102,7 @@ public class MyUploadUtil {
 				String name = item.getName();
 				if (item.isFormField()) {
 					// 如果是普通表单字段
-					String value = item.getString();
+					String value = item.getString("UTF-8");
 					jsonMap.put(fieldName, value);
 
 				} else {
