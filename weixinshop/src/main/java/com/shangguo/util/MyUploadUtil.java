@@ -1,6 +1,7 @@
 package com.shangguo.util;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,7 +48,8 @@ public class MyUploadUtil {
 
 	@SuppressWarnings("deprecation")
 	public <T> UploadType doUpload(HttpServletRequest request, T data)
-			throws FileUploadException {
+			throws FileUploadException, UnsupportedEncodingException {
+
 		logger.info("UploadFileServlet#doPost() start");
 		/** 返回状态 */
 		State state = State.OK;
@@ -55,13 +57,17 @@ public class MyUploadUtil {
 		try {
 
 			String curProjectPath = request.getRealPath("/");
-			String saveDirectoryPath = curProjectPath + "/" + uploadFolderName;
-			String tempDirectoryPath = curProjectPath + "/" + tempFolderName;
+			String SSS = request.getRequestURL().toString();
+			String saveDirectoryPath = curProjectPath + uploadFolderName;
+			String tempDirectoryPath = curProjectPath + tempFolderName;
 			File saveDirectory = new File(saveDirectoryPath);
 			File tempDirectory = new File(tempDirectoryPath);
 			// 上传临时文件的默认目录为java.io.tmpdir中保存的路径，根据操作系统的不同会有区别
 			if (!tempDirectory.exists()) {
 				tempDirectory.mkdir();
+			}
+			if (!saveDirectory.exists()) {
+				saveDirectory.mkdir();
 			}
 			logger.debug("Project real path ["
 					+ saveDirectory.getAbsolutePath() + "]");
@@ -103,7 +109,9 @@ public class MyUploadUtil {
 					// 如果是文件字段
 					logger.debug("fieldName[" + fieldName + "] fileName["
 							+ name + "] ");
-
+					System.out.println("保存文件：位置" + saveDirectoryPath
+							+ "fieldName[" + fieldName + "] fileName[" + name
+							+ "] ");
 					if (item.getSize() > 0) {
 						String fileExtension = FilenameUtils.getExtension(name);
 						if (!ArrayUtils
@@ -113,7 +121,10 @@ public class MyUploadUtil {
 						String fileName = FilenameUtils.getName(name);
 						FileUtils.copyInputStreamToFile(item.getInputStream(),
 								new File(saveDirectory, fileName));
+						jsonMap.put(fieldName, uploadFolderName + "/" + name);
+
 					}
+
 				}
 
 			}

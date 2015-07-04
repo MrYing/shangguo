@@ -33,7 +33,7 @@ public class CouponDao extends BaseDaoImpl<T_coupon> implements ICouponDao {
 		return super.delete(id, id_name);
 	}
 
-	public void batchSave(List<T_coupon> list) {
+	/*public void batchSave(List<T_coupon> list) {
 		super.batchSave(list);
 	}
 
@@ -43,7 +43,7 @@ public class CouponDao extends BaseDaoImpl<T_coupon> implements ICouponDao {
 
 	public void batchDelete(List<T_coupon> list) {
 		super.batchDelete(list);
-	}
+	}*/
 
 	public T_coupon findById(int id) {
 		exists_id(id);

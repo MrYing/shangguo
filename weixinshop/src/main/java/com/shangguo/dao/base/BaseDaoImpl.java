@@ -63,6 +63,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 	}
 
+	/**
+	 * 根据传入单个实体保存
+	 */
 	public int save(T entity, String id_name) {
 		exists_id_name(id_name);
 		System.out.println("++++save+++++");
@@ -74,6 +77,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return jdbcTemplate.update(sql.toString(), args);
 	}
 
+	/**
+	 * 根据传入单个实体更新
+	 */
 	public int update(T entity, String id_name) {
 		System.out.println("++++update+++++");
 		exists_id_name(id_name);
@@ -84,6 +90,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return jdbcTemplate.update(sql, args);
 	}
 
+	/**
+	 * 根据传入单个实体删除
+	 */
 	public int delete(T entity, String id_name) {
 		System.out.println("++++delete+++++");
 		exists_id_name(id_name);
@@ -94,6 +103,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return jdbcTemplate.update(sql, args);
 	}
 
+	/**
+	 * 根据传入单个Id删除
+	 */
 	public int delete(int id, String id_name) {
 		exists_id_name(id_name);
 		String sql = " DELETE FROM " + entityClass.getSimpleName() + " WHERE "
@@ -102,38 +114,94 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	/**
-	 * 不分页
+	 * 根据传入的sql和参数信息，执行语句
 	 * 
 	 * @param sql
 	 * @param args
 	 * @return
 	 */
-	public int query(String sql, ArrayList<Object> param) {
-		return jdbcTemplate.update(sql, param.toArray());
+	public List<T> query(String sql, ArrayList<Object> param) {
+		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
+		return jdbcTemplate.query(sql.toString(), param.toArray(), rowMapper);
 	}
 
 	/**
-	 * 未完成
+	 * 批量保存
+	 * 
+	 * @return
 	 */
+	public int[] batchSave(List<T> list, String id_name) {
+		exists_id_name(id_name);
+		System.out.println("++++batchsave+++++");
+		String sql = this.makeSql(SQL_INSERT, id_name);
+		System.out.println(sql);
+		List<Object[]> argsList = new ArrayList<Object[]>();
+		for (T entity : list) {
+			Object[] args = this.setArgs(entity, SQL_INSERT, id_name);
+			argsList.add(args);
+		}
+		// int[] argTypes = this.setArgTypes(entity, SQL_INSERT);
 
-	public void batchSave(List<T> list) {
-
+		return jdbcTemplate.batchUpdate(sql.toString(), argsList);
 	}
 
 	/**
-	 * 未完成
+	 * 批量更新
 	 */
-
-	public void batchUpdate(List<T> list) {
-
+	public int[] batchUpdate(List<T> list, String id_name) {
+		System.out.println("++++batchupdate+++++");
+		exists_id_name(id_name);
+		String sql = this.makeSql(SQL_UPDATE, id_name);
+		System.out.println(sql);
+		List<Object[]> argsList = new ArrayList<Object[]>();
+		for (T entity : list) {
+			Object[] args = this.setArgs(entity, SQL_UPDATE, id_name);
+			argsList.add(args);
+		}
+		// int[] argTypes = this.setArgTypes(entity, SQL_UPDATE);
+		return jdbcTemplate.batchUpdate(sql, argsList);
 	}
 
 	/**
-	 * 未完成
+	 * 批量删除
+	 * 
+	 * @return
+	 * 
 	 */
+	public int[] batchDelete(List<T> list, String id_name) {
+		System.out.println("++++batchdelete+++++");
+		exists_id_name(id_name);
+		String sql = this.makeSql(SQL_DELETE, id_name);
+		System.out.println(sql);
+		List<Object[]> argsList = new ArrayList<Object[]>();
+		for (T entity : list) {
+			Object[] args = this.setArgs(entity, SQL_DELETE, id_name);
+			argsList.add(args);
+		}
+		// int[] argTypes = this.setArgTypes(entity, SQL_DELETE);
+		return jdbcTemplate.batchUpdate(sql, argsList);
+	}
 
-	public void batchDelete(List<T> list) {
+	/**
+	 * 根据传入多个Id删除数据
+	 */
+	public void batchDeleteById(int[] ids, String id_name) {
+		exists_id_name(id_name);
+		StringBuilder sql = new StringBuilder(" DELETE FROM "
+				+ entityClass.getSimpleName() + " WHERE " + id_name + " in ("); // )?)";
+		for (Object id : ids) {
+			sql.append("?,");
+		}
+		sql = sql.deleteCharAt(sql.length() - 1);
+		sql.append(") ");
 
+		int length = ids.length;
+		Object[] args = new Object[length];
+		for (int i = 0; i < length; i++) {
+			args[i] = ids[i];
+		}
+
+		jdbcTemplate.update(sql.toString(), args);
 	}
 
 	/**
@@ -534,6 +602,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	private List<T> normalFind(int pageNo, int pageSize, String findsql,
 			ArrayList<Object> param) {
+		if (pageSize == 0)
+			pageSize = 1000;
+		if (pageNo == 0)
+			pageNo = 1;
 		// where 与 order by 要写在select * from table 的后面，而不是where rownum<=? )
 		// where rn>=?的后面
 		StringBuffer sql = new StringBuffer(" SELECT t.* FROM (");

@@ -1,5 +1,6 @@
 package com.shangguo.dao.base;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +20,17 @@ public interface BaseDao<T> {
 
 	int delete(int id, String id_name);
 
-	void batchSave(List<T> list);
+	int[] batchSave(List<T> list, String id_name);
 
-	void batchUpdate(List<T> list);
+	int[] batchUpdate(List<T> list, String id_name);
 
-	void batchDelete(List<T> list);
+	int[] batchDelete(List<T> list, String id_name);
+
+	void batchDeleteById(int[] ids, String id_name);
 
 	T findById(int id, String id_name);
+
+	List<T> query(String sql, ArrayList<Object> param);
 
 	List<T> findAll();
 

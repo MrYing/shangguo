@@ -7,7 +7,7 @@ import com.shangguo.dao.shoppingcart.IShoppingcartDao;
 import com.shangguo.model.shoppingcart.T_shoppingcart;
 
 public class ShoppingcartDao extends BaseDaoImpl<T_shoppingcart> implements
-		IShoppingcartDao {
+		IShoppingcartDao {/*
 	public int save(T_shoppingcart entity) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("insert into T_shoppingcart set user_id = ? , goods_id=? ,buy_count=? ");
@@ -49,4 +49,4 @@ public class ShoppingcartDao extends BaseDaoImpl<T_shoppingcart> implements
 		return super.query(sql.toString(), param);
 	}
 
-}
+*/}

@@ -33,7 +33,7 @@ public class UserDao extends BaseDaoImpl<T_user> implements IUserDao {
 		return super.delete(id, id_name);
 	}
 
-	public void batchSave(List<T_user> list) {
+/*	public void batchSave(List<T_user> list) {
 		super.batchSave(list);
 	}
 
@@ -43,7 +43,7 @@ public class UserDao extends BaseDaoImpl<T_user> implements IUserDao {
 
 	public void batchDelete(List<T_user> list) {
 		super.batchDelete(list);
-	}
+	}*/
 
 	public T_user findById(int id) {
 		exists_id(id);

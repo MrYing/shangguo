@@ -35,7 +35,7 @@ public class AdminDao extends BaseDaoImpl<T_admin> implements IAdamin {
 		return super.delete(id, id_name);
 	}
 
-	public void batchSave(List<T_admin> list) {
+/*	public void batchSave(List<T_admin> list) {
 		super.batchSave(list);
 
 	}
@@ -48,7 +48,7 @@ public class AdminDao extends BaseDaoImpl<T_admin> implements IAdamin {
 	public void batchDelete(List<T_admin> list) {
 		super.batchDelete(list);
 
-	}
+	}*/
 
 	public T_admin findById(int id) {
 		exists_id(id);

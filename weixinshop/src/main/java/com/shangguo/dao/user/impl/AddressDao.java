@@ -32,7 +32,7 @@ public class AddressDao extends BaseDaoImpl<T_address> implements IAddressDao {
 		exists_id(id);
 		return super.delete(id, id_name);
 	}
-
+/*
 	public void batchSave(List<T_address> list) {
 		super.batchSave(list);
 	}
@@ -43,7 +43,7 @@ public class AddressDao extends BaseDaoImpl<T_address> implements IAddressDao {
 
 	public void batchDelete(List<T_address> list) {
 		super.batchDelete(list);
-	}
+	}*/
 
 	public T_address findById(int id) {
 		exists_id(id);

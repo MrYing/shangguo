@@ -33,7 +33,7 @@ public class OrderDao extends BaseDaoImpl<T_order> implements IOrderDao {
 		return super.delete(id, id_name);
 	}
 
-	public void batchSave(List<T_order> list) {
+/*	public void batchSave(List<T_order> list) {
 		super.batchSave(list);
 	}
 
@@ -43,7 +43,7 @@ public class OrderDao extends BaseDaoImpl<T_order> implements IOrderDao {
 
 	public void batchDelete(List<T_order> list) {
 		super.batchDelete(list);
-	}
+	}*/
 
 	public T_order findById(int id) {
 		exists_id(id);

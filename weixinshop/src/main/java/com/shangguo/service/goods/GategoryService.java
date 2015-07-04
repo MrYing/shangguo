@@ -5,35 +5,36 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.shangguo.dao.base.QueryResult;
-import com.shangguo.dao.goods.impl.GoodsDao;
-import com.shangguo.model.goods.T_GOODS;
+import com.shangguo.dao.goods.impl.GategoryDao;
+import com.shangguo.model.goods.T_goods_gategory;
 import com.shangguo.util.MyUtil;
 
-public class GoodsService {
-	GoodsDao dao = new GoodsDao();
+public class GategoryService {
 
-	public List<T_GOODS> getall() {
+	GategoryDao dao = new GategoryDao();
+
+	public List<T_goods_gategory> getall() {
 		return dao.findAll();
 	}
 
 	/**
 	 * 保存
 	 */
-	public int save(T_GOODS entity) {
+	public int save(T_goods_gategory entity) {
 		return dao.save(entity);
 	}
 
 	/**
 	 * 更新
 	 */
-	public int update(T_GOODS entity) {
+	public int update(T_goods_gategory entity) {
 		return dao.update(entity);
 	}
 
 	/**
 	 * 批量删除
 	 */
-	public int[] batchDelete(List<T_GOODS> list) {
+	public int[] batchDelete(List<T_goods_gategory> list) {
 		return dao.batchDelete(list);
 	}
 
@@ -52,7 +53,7 @@ public class GoodsService {
 	 *            排序
 	 * @return
 	 */
-	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize,
+	public QueryResult<T_goods_gategory> findByPage(int pageNo, int pageSize,
 			LinkedHashMap<String, String> orderby) {
 		return dao.findByPage(pageNo, pageSize, orderby);
 	}
@@ -65,39 +66,17 @@ public class GoodsService {
 	 * @param name
 	 * @return
 	 */
-	public QueryResult<T_GOODS> findBynameByPage(int pageNo, int pageSize,
-			String name) {
+	public QueryResult<T_goods_gategory> findBynameByPage(int pageNo,
+			int pageSize, String name) {
 		StringBuffer sql = new StringBuffer();
 		ArrayList<Object> param = new ArrayList<Object>();
-		sql.append("select * from t_goods ");
+		sql.append("select * from t_goods_gategory ");
 		if (MyUtil.isNotEmpty(name)) {
-			sql.append(" where goods_name like ?");
+			sql.append(" where name like ?");
 			param.add("%" + name + "%");
 		}
-		sql.append(" order by goods_order ");
+		sql.append(" order by gategory_id ");
 		return dao.findByPage(pageNo, pageSize, sql.toString(), param);
-	}
-
-	/**
-	 * 按Gategoryid查询
-	 * 
-	 * @param pageNo
-	 * @param pageSize
-	 * @param name
-	 * @return
-	 */
-	public List<T_GOODS> findByGategoryid(int[] ids) {
-		StringBuffer sql = new StringBuffer();
-		ArrayList<Object> param = new ArrayList<Object>();
-		sql.append("select * from t_goods  where gategory_id in ( ");
-		for (Object id : ids) {
-			sql.append("?,");
-			param.add(id);
-		}
-		sql = sql.deleteCharAt(sql.length() - 1);
-		sql.append(") ");
-
-		return dao.query(sql.toString(), param);
 	}
 
 }
