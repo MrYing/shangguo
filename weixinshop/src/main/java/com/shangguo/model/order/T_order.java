@@ -15,6 +15,7 @@ public class T_order implements Serializable {
 	private int order_id;
 	private int order_type;
 	private int user_id;
+	private String user_name;
 	private int order_status;
 	private Date order_time;
 	private int pay_type;
@@ -137,5 +138,13 @@ public class T_order implements Serializable {
 
 	public void setActivity_type(int activity_type) {
 		this.activity_type = activity_type;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
 }
