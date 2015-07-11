@@ -10,6 +10,7 @@ import com.shangguo.dao.base.QueryResult;
 import com.shangguo.dao.goods.IGategoryDao;
 import com.shangguo.model.goods.T_GOODS;
 import com.shangguo.model.goods.T_goods_gategory;
+import com.shangguo.util.MyUtil;
 
 public class GategoryDao extends BaseDaoImpl<T_goods_gategory> implements
 		IGategoryDao {
@@ -83,6 +84,27 @@ public class GategoryDao extends BaseDaoImpl<T_goods_gategory> implements
 	public QueryResult<T_goods_gategory> findByPage(int pageNo, int pageSize,
 			String findsql, ArrayList<Object> param) {
 		return super.findByPage(pageNo, pageSize, findsql, param);
+	}
+
+	/**
+	 * 按名称模糊查询
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param name
+	 * @return
+	 */
+	public QueryResult<T_goods_gategory> findBynameByPage(int pageNo,
+			int pageSize, String name) {
+		StringBuffer sql = new StringBuffer();
+		ArrayList<Object> param = new ArrayList<Object>();
+		sql.append("select * from t_goods_gategory ");
+		if (MyUtil.isNotEmpty(name)) {
+			sql.append(" where name like ?");
+			param.add("%" + name + "%");
+		}
+		sql.append(" order by gategory_id ");
+		return findByPage(pageNo, pageSize, sql.toString(), param);
 	}
 
 	private void exists_id(int id) {

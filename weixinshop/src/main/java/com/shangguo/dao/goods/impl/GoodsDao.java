@@ -11,6 +11,7 @@ import com.shangguo.dao.base.BaseDaoImpl;
 import com.shangguo.dao.base.QueryResult;
 import com.shangguo.dao.goods.IGoodsDao;
 import com.shangguo.model.goods.T_GOODS;
+import com.shangguo.util.MyUtil;
 
 @Repository
 public class GoodsDao extends BaseDaoImpl<T_GOODS> implements IGoodsDao {
@@ -84,6 +85,49 @@ public class GoodsDao extends BaseDaoImpl<T_GOODS> implements IGoodsDao {
 	public QueryResult<T_GOODS> findByPage(int pageNo, int pageSize,
 			String findsql, ArrayList<Object> param) {
 		return super.findByPage(pageNo, pageSize, findsql, param);
+	}
+
+	/**
+	 * 按名称模糊查询
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param name
+	 * @return
+	 */
+	public QueryResult<T_GOODS> findBynameByPage(int pageNo, int pageSize,
+			String name) {
+		StringBuffer sql = new StringBuffer();
+		ArrayList<Object> param = new ArrayList<Object>();
+		sql.append("select * from t_goods ");
+		if (MyUtil.isNotEmpty(name)) {
+			sql.append(" where goods_name like ?");
+			param.add("%" + name + "%");
+		}
+		sql.append(" order by goods_order ");
+		return findByPage(pageNo, pageSize, sql.toString(), param);
+	}
+
+	/**
+	 * 按Gategoryid查询
+	 * 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param name
+	 * @return
+	 */
+	public List<T_GOODS> findByGategoryid(int[] ids) {
+		StringBuffer sql = new StringBuffer();
+		ArrayList<Object> param = new ArrayList<Object>();
+		sql.append("select * from t_goods  where gategory_id in ( ");
+		for (Object id : ids) {
+			sql.append("?,");
+			param.add(id);
+		}
+		sql = sql.deleteCharAt(sql.length() - 1);
+		sql.append(") ");
+
+		return query(sql.toString(), param);
 	}
 
 	private void exists_id(int id) {

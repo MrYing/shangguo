@@ -1,13 +1,11 @@
 package com.shangguo.service.goods;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.shangguo.dao.base.QueryResult;
 import com.shangguo.dao.goods.impl.GategoryDao;
 import com.shangguo.model.goods.T_goods_gategory;
-import com.shangguo.util.MyUtil;
 
 public class GategoryService {
 
@@ -68,15 +66,7 @@ public class GategoryService {
 	 */
 	public QueryResult<T_goods_gategory> findBynameByPage(int pageNo,
 			int pageSize, String name) {
-		StringBuffer sql = new StringBuffer();
-		ArrayList<Object> param = new ArrayList<Object>();
-		sql.append("select * from t_goods_gategory ");
-		if (MyUtil.isNotEmpty(name)) {
-			sql.append(" where name like ?");
-			param.add("%" + name + "%");
-		}
-		sql.append(" order by gategory_id ");
-		return dao.findByPage(pageNo, pageSize, sql.toString(), param);
+		return dao.findBynameByPage(pageNo, pageSize, name);
 	}
 
 }

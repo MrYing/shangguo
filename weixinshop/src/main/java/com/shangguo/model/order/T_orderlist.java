@@ -13,7 +13,7 @@ public class T_orderlist implements Serializable {
 	private static final long serialVersionUID = 8134027564350123479L;
 	private int order_id;
 	private int good_id;
-	private double good_name;
+	private String good_name;
 	private double original_price;
 	private double present_price;
 	private double order_price;
@@ -36,11 +36,11 @@ public class T_orderlist implements Serializable {
 		return good_id;
 	}
 
-	public void setGood_name(double good_name) {
+	public void setGood_name(String good_name) {
 		this.good_name = good_name;
 	}
 
-	public double getGood_name() {
+	public String getGood_name() {
 		return good_name;
 	}
 

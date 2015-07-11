@@ -42,7 +42,7 @@ public class MyJsonUtil {
 						if (paramObject == null) {
 							return 0.00;
 						}
-						DecimalFormat format = new DecimalFormat("#.00");
+						DecimalFormat format = new DecimalFormat("#0.00");
 						String sMoney = format.format(paramObject);
 						return sMoney;
 					}

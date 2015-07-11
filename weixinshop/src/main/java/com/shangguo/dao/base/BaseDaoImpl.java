@@ -67,7 +67,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 根据传入单个实体保存
 	 */
 	public int save(T entity, String id_name) {
-		exists_id_name(id_name);
+//		exists_id_name(id_name);
 		System.out.println("++++save+++++");
 		String sql = this.makeSql(SQL_INSERT, id_name);
 		System.out.println(sql);
@@ -603,7 +603,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	private List<T> normalFind(int pageNo, int pageSize, String findsql,
 			ArrayList<Object> param) {
 		if (pageSize == 0)
-			pageSize = 1000;
+			pageSize = 100000;
 		if (pageNo == 0)
 			pageNo = 1;
 		// where 与 order by 要写在select * from table 的后面，而不是where rownum<=? )

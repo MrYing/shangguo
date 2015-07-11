@@ -1,5 +1,6 @@
 package com.shangguo.dao.order.impl;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +68,24 @@ public class OrderDao extends BaseDaoImpl<T_order> implements IOrderDao {
 			LinkedHashMap<String, String> orderby) {
 		return super.findByPage(pageNo, pageSize, orderby);
 	}
+	
+	public QueryResult<T_order> findBynameByPage(int pageNo, int pageSize,
+			int order_id, int user_id) {
+		StringBuffer sql = new StringBuffer();
+		ArrayList<Object> param = new ArrayList<Object>();
+		sql.append("select * from t_order ");
+		if (order_id != -999) {
+			sql.append(" where order_id like ?");
+			param.add("%" + order_id + "%");
+		}
+		if (user_id != -999) {
+			sql.append(" where user_id like ?");
+			param.add("%" + user_id + "%");
+		}
+		sql.append(" order by order_id ");
+		return super.findByPage(pageNo, pageSize, sql.toString(), param);
+	}
+	
 
 	private void exists_id(int id) {
 		try {
