@@ -8,14 +8,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.shangguo.weixin.service.CoreService;
+import org.apache.log4j.Logger;
+
+import com.shangguo.weixin.service.WeiXinCoreService;
 import com.shangguo.weixin.util.SignUtil;
 
 /**
  * @author Jabn_Mai
  *
  */
-public class CoreServlet extends HttpServlet {
+public class WeiXinCoreServlet extends HttpServlet {
+	private static Logger logger = Logger.getLogger(WeiXinCoreServlet.class);
 	private static final long serialVersionUID = 4440739483644821986L;
 
 	/**
@@ -36,6 +39,9 @@ public class CoreServlet extends HttpServlet {
 		// 请求校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
 		if (SignUtil.checkSignature(signature, timestamp, nonce)) {
 			out.print(echostr);
+			
+		}else{
+			logger.info("请求校验失败！");
 		}
 		out.close();
 		out = null;
@@ -58,7 +64,7 @@ public class CoreServlet extends HttpServlet {
 		
 		if (SignUtil.checkSignature(signature, timestamp, nonce)) {
 			// 调用核心业务类接收消息、处理消息
-			String respXml = CoreService.processRequest(request);
+			String respXml = WeiXinCoreService.processRequest(request);
 
 			// 响应消息
 			PrintWriter out = response.getWriter();

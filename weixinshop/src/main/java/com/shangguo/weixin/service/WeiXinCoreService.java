@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import com.shangguo.weixin.message.Article;
 import com.shangguo.weixin.message.NewsMessage;
 import com.shangguo.weixin.message.TextMessage;
@@ -19,7 +21,9 @@ import com.shangguo.weixin.util.ProjectRootPath;
  * @author JabnMai
  * @date 2015-7-7
  */
-public class CoreService {
+public class WeiXinCoreService {
+	
+	private static Logger logger = Logger.getLogger(WeiXinCoreService.class);
 	/**
 	 * 处理微信发来的请求
 	 * 
