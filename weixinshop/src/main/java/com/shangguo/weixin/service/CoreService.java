@@ -16,8 +16,8 @@ import com.shangguo.weixin.util.ProjectRootPath;
 /**
  * 核心服务类
  * 
- * @author liufeng
- * @date 2013-10-17
+ * @author JabnMai
+ * @date 2015-7-7
  */
 public class CoreService {
 	/**
