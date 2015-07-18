@@ -8,7 +8,7 @@ import java.util.Date;
  */
 
 public class T_user implements Serializable {
-	private static final long serialVersionUID = -1088445863323267490L;
+	private static final long serialVersionUID = -1088445863323267490L;  
 	private int user_id;
 	private String user_name;
 	private Date join_time;
