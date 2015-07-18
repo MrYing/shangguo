@@ -21,6 +21,7 @@ public class T_user implements Serializable {
 	private Date creat_time;
 	private String openID;
 	private String unionID;
+
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
