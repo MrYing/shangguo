@@ -113,7 +113,7 @@ public class T_user implements Serializable {
 	public String getUnionID() {
 		return unionID;
 	}
-
+  
 	public void setUnionID(String unionID) {
 		this.unionID = unionID;
 	}
