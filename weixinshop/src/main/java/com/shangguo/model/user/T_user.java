@@ -19,6 +19,8 @@ public class T_user implements Serializable {
 	private int score;
 	private String icon_url;
 	private Date creat_time;
+	private String openID;
+	private String unionID;
 
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
@@ -98,5 +100,21 @@ public class T_user implements Serializable {
 
 	public Date getCreat_time() {
 		return creat_time;
+	}
+
+	public String getOpenID() {
+		return openID;
+	}
+
+	public void setOpenID(String openID) {
+		this.openID = openID;
+	}
+
+	public String getUnionID() {
+		return unionID;
+	}
+
+	public void setUnionID(String unionID) {
+		this.unionID = unionID;
 	}
 }
