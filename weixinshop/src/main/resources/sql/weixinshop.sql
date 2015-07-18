@@ -198,3 +198,6 @@ ALTER TABLE t_coupon ADD CONSTRAINT FK_Reference_coupon FOREIGN KEY (user_id)
 ALTER TABLE t_orderlist ADD CONSTRAINT FK_Reference_order FOREIGN KEY (order_id)
       REFERENCES t_order (order_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+
+ALTER TABLE `t_user`  ADD COLUMN `openID` VARCHAR(64) ; 
+ALTER TABLE `t_user`  ADD COLUMN `unionID` VARCHAR(64) ; 
