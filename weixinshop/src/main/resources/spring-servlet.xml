@@ -36,7 +36,7 @@
 			class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 			<!-- 模板路径为WEB-INF/pages/ -->
 			<property name="prefix">
-				<value>/WEB-INF/backadmin/</value>
+				<value>/backadmin/</value>
 			</property>
 			<!-- 视图模板后缀为.JSP -->
 			<property name="suffix">
