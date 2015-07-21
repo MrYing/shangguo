@@ -30,7 +30,7 @@ import com.shangguo.util.UploadType;
  * 
  */
 @Controller
-@RequestMapping(value = "/admin")
+@RequestMapping(value = "/backadmin/admin")
 public class GoodsController {
 	/**
 	 * 查询方法
