@@ -23,7 +23,7 @@ import com.shangguo.util.MyUtil;
  * 
  */
 @Controller
-@RequestMapping(value = "/admin")
+@RequestMapping(value = "/backadmin/admin")
 public class OrderClntroller {
 	@RequestMapping(value = "/order_search.do")
 	public void search(HttpServletRequest request, HttpServletResponse response)

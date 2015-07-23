@@ -30,7 +30,7 @@ import com.shangguo.util.MyUtil;
  * 
  */
 @Controller
-@RequestMapping(value = "/admin")
+@RequestMapping(value = "/backadmin/admin")
 public class GategoryController {
 
 	/**
