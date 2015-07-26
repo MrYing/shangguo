@@ -34,17 +34,13 @@ public class OrderDao extends BaseDaoImpl<T_order> implements IOrderDao {
 		return super.delete(id, id_name);
 	}
 
-/*	public void batchSave(List<T_order> list) {
-		super.batchSave(list);
-	}
-
-	public void batchUpdate(List<T_order> list) {
-		super.batchUpdate(list);
-	}
-
-	public void batchDelete(List<T_order> list) {
-		super.batchDelete(list);
-	}*/
+	/*
+	 * public void batchSave(List<T_order> list) { super.batchSave(list); }
+	 * 
+	 * public void batchUpdate(List<T_order> list) { super.batchUpdate(list); }
+	 * 
+	 * public void batchDelete(List<T_order> list) { super.batchDelete(list); }
+	 */
 
 	public T_order findById(int id) {
 		exists_id(id);
@@ -68,7 +64,7 @@ public class OrderDao extends BaseDaoImpl<T_order> implements IOrderDao {
 			LinkedHashMap<String, String> orderby) {
 		return super.findByPage(pageNo, pageSize, orderby);
 	}
-	
+
 	public QueryResult<T_order> findBynameByPage(int pageNo, int pageSize,
 			int order_id, int user_id) {
 		StringBuffer sql = new StringBuffer();
@@ -85,7 +81,21 @@ public class OrderDao extends BaseDaoImpl<T_order> implements IOrderDao {
 		sql.append(" order by order_id ");
 		return super.findByPage(pageNo, pageSize, sql.toString(), param);
 	}
-	
+
+	public int updateStatus(int status, String[] orderIds) {
+		StringBuffer sql = new StringBuffer();
+		ArrayList<Object> param = new ArrayList<Object>();
+		sql.append(" update t_order set order_status = ? where order_id in ( ");
+		param.add(status);
+		for (String id : orderIds) {
+			sql.append("?,");
+			param.add(id);
+		}
+		sql = sql.deleteCharAt(sql.length() - 1);
+		sql.append(") ");
+
+		return super.modify(sql.toString(), param);
+	}
 
 	private void exists_id(int id) {
 		try {

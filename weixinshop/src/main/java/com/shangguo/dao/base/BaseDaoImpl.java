@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,6 +26,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	public static final String SQL_INSERT = "insert";
 	public static final String SQL_UPDATE = "update";
 	public static final String SQL_DELETE = "delete";
+
+	private static final Log log = LogFactory.getLog(BaseDaoImpl.class);
 
 	private JdbcTemplate jdbcTemplate = new JdbcTemplate();;
 
@@ -67,10 +71,12 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 根据传入单个实体保存
 	 */
 	public int save(T entity, String id_name) {
-//		exists_id_name(id_name);
-		System.out.println("++++save+++++");
+		log.info("save");
+		// exists_id_name(id_name);
+//		System.out.println("++++save+++++");
 		String sql = this.makeSql(SQL_INSERT, id_name);
-		System.out.println(sql);
+		log.info("save方法执行sql【"+sql+"】");
+//		System.out.println(sql);
 		Object[] args = this.setArgs(entity, SQL_INSERT, id_name);
 		// int[] argTypes = this.setArgTypes(entity, SQL_INSERT);
 
@@ -81,10 +87,11 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 根据传入单个实体更新
 	 */
 	public int update(T entity, String id_name) {
+		log.info("update");
 		System.out.println("++++update+++++");
 		exists_id_name(id_name);
 		String sql = this.makeSql(SQL_UPDATE, id_name);
-		System.out.println(sql);
+		log.info(sql);
 		Object[] args = this.setArgs(entity, SQL_UPDATE, id_name);
 		// int[] argTypes = this.setArgTypes(entity, SQL_UPDATE);
 		return jdbcTemplate.update(sql, args);
@@ -94,10 +101,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 根据传入单个实体删除
 	 */
 	public int delete(T entity, String id_name) {
-		System.out.println("++++delete+++++");
+		log.info("++++delete+++++");
 		exists_id_name(id_name);
 		String sql = this.makeSql(SQL_DELETE, id_name);
-		System.out.println(sql);
+		log.info(sql);
 		Object[] args = this.setArgs(entity, SQL_DELETE, id_name);
 		// int[] argTypes = this.setArgTypes(entity, SQL_DELETE);
 		return jdbcTemplate.update(sql, args);
@@ -110,11 +117,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		exists_id_name(id_name);
 		String sql = " DELETE FROM " + entityClass.getSimpleName() + " WHERE "
 				+ id_name + "=?";
+		log.info(sql);
 		return jdbcTemplate.update(sql, id);
 	}
 
 	/**
-	 * 根据传入的sql和参数信息，执行语句
+	 * 根据传入的sql和参数信息，执行语句，无分页
+	 * 使用查询返回LIst
 	 * 
 	 * @param sql
 	 * @param args
@@ -122,7 +131,19 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 */
 	public List<T> query(String sql, ArrayList<Object> param) {
 		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
+		log.info(sql);
 		return jdbcTemplate.query(sql.toString(), param.toArray(), rowMapper);
+	}
+	
+	/**
+	 * 根据sql增删改查
+	 * @param sql
+	 * @param param
+	 * @return
+	 */
+	public int modify(String sql, ArrayList<Object> param) {
+		log.info(sql);
+		return jdbcTemplate.update(sql.toString(), param.toArray());
 	}
 
 	/**
@@ -132,9 +153,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 */
 	public int[] batchSave(List<T> list, String id_name) {
 		exists_id_name(id_name);
-		System.out.println("++++batchsave+++++");
+		log.info("++++batchsave+++++");
 		String sql = this.makeSql(SQL_INSERT, id_name);
-		System.out.println(sql);
+		log.info(sql);
 		List<Object[]> argsList = new ArrayList<Object[]>();
 		for (T entity : list) {
 			Object[] args = this.setArgs(entity, SQL_INSERT, id_name);
@@ -149,10 +170,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 批量更新
 	 */
 	public int[] batchUpdate(List<T> list, String id_name) {
-		System.out.println("++++batchupdate+++++");
+		log.info("++++batchupdate+++++");
 		exists_id_name(id_name);
 		String sql = this.makeSql(SQL_UPDATE, id_name);
-		System.out.println(sql);
+		log.info(sql);
 		List<Object[]> argsList = new ArrayList<Object[]>();
 		for (T entity : list) {
 			Object[] args = this.setArgs(entity, SQL_UPDATE, id_name);
@@ -169,10 +190,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	 * 
 	 */
 	public int[] batchDelete(List<T> list, String id_name) {
-		System.out.println("++++batchdelete+++++");
+		log.info("++++batchdelete+++++");
 		exists_id_name(id_name);
 		String sql = this.makeSql(SQL_DELETE, id_name);
-		System.out.println(sql);
+		log.info(sql);
 		List<Object[]> argsList = new ArrayList<Object[]>();
 		for (T entity : list) {
 			Object[] args = this.setArgs(entity, SQL_DELETE, id_name);
@@ -183,7 +204,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	/**
-	 * 根据传入多个Id删除数据
+	 * 根据传入多个Id（单主键）删除数据
 	 */
 	public void batchDeleteById(int[] ids, String id_name) {
 		exists_id_name(id_name);
@@ -200,7 +221,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		for (int i = 0; i < length; i++) {
 			args[i] = ids[i];
 		}
-
+		log.info(sql);
 		jdbcTemplate.update(sql.toString(), args);
 	}
 
@@ -212,6 +233,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		String sql = "SELECT * FROM " + entityClass.getSimpleName()
 				+ "  WHERE " + id_name + "=? ";
 		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
+		log.info(sql);
 		return jdbcTemplate.query(sql, rowMapper, id).get(0);
 	}
 
@@ -221,12 +243,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	public List<T> findAll() {
 		String sql = "SELECT * FROM " + entityClass.getSimpleName();
 		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
-		List<T> list = jdbcTemplate.query(sql, rowMapper);
-		return jdbcTemplate.query(sql, rowMapper);
+		log.info(sql);
+		List<T> list = jdbcTemplate.query(sql, rowMapper);	
+		return list;
 	}
 
 	/**
-	 * 查询条件加排序条件
+	 * 全表分页查询
 	 * 
 	 * @param pageNo
 	 *            当前页
@@ -297,6 +320,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	}
 
 	/**
+	 * 根据sql,参数信息分页查询
 	 * 
 	 * @param pageNo
 	 *            当前页
@@ -356,6 +380,62 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 					+ " WHERE " + id_name + "=? ");
 		}
 		System.out.println("执行SQL=" + sql);
+		return sql.toString();
+
+	}
+
+	// 多主键情况 ，组装SQL
+	private String mutiIdMakeSql(String sqlFlag, List<String> id_names) {
+		StringBuffer sql = new StringBuffer();
+		StringBuffer argsnum = new StringBuffer();
+		Field[] fields = entityClass.getDeclaredFields();
+		if (sqlFlag.equals(SQL_INSERT)) {
+			sql.append(" INSERT INTO " + entityClass.getSimpleName());
+			sql.append("(");
+			for (int i = 0; fields != null && i < fields.length; i++) {
+				fields[i].setAccessible(true); // 暴力反射
+				String column = fields[i].getName();
+				if (id_names.contains(column)
+						|| "serialVersionUID".equals(column)) { // 传入主键名称
+					continue;
+				}
+				sql.append(column).append(",");
+				argsnum.append("?,");
+			}
+			sql = sql.deleteCharAt(sql.length() - 1);
+			sql.append(") VALUES (");
+			sql.append(argsnum);
+
+			sql = sql.deleteCharAt(sql.length() - 1);
+			sql.append(")");
+		} else if (sqlFlag.equals(SQL_UPDATE)) {
+			sql.append(" UPDATE " + entityClass.getSimpleName() + " SET ");
+			for (int i = 0; fields != null && i < fields.length; i++) {
+				fields[i].setAccessible(true); // 暴力反射
+				String column = fields[i].getName();
+				if ("serialVersionUID".equals(column)) { // 传入主键名称
+					continue;
+				}
+
+				sql.append(column).append("=").append("?,");
+			}
+			sql = sql.deleteCharAt(sql.length() - 1);
+			sql.append(" WHERE ");
+			for (String id_name : id_names) {
+				sql.append(" " + id_name + "=?  and");
+			}
+			sql = sql.deleteCharAt(sql.length() - 3);
+
+		} else if (sqlFlag.equals(SQL_DELETE)) {
+			sql.append(" DELETE FROM " + entityClass.getSimpleName() + " ");
+
+			sql.append(" WHERE ");
+			for (String id_name : id_names) {
+				sql.append(" " + id_name + "=?  and");
+			}
+			sql = sql.deleteCharAt(sql.length() - 3);
+		}
+		System.out.println("【执行SQL=" + sql + "】");
 		return sql.toString();
 
 	}
@@ -472,7 +552,130 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 			}
 			argsString = argsString.deleteCharAt(argsString.length() - 1);
 			System.out.println(argsString);
+			log.info(argsString);
 			return args;
+		}
+		return null;
+
+	}
+
+	// 多主键 设置参数
+	private Object[] mutiIdSetArgs(T entity, String sqlFlag,
+			List<String> id_names) {
+
+		Field[] fields = entityClass.getDeclaredFields();
+		if (sqlFlag.equals(SQL_INSERT)) {
+			ArrayList<Object> argLlist = new ArrayList<Object>();
+			int length = fields.length;
+			// Object[] args = new Object[fields.length];
+			for (int i = 0; length > 0 && i < length; i++) {
+				try {
+					fields[i].setAccessible(true); // 暴力反射
+					String column = fields[i].getName();
+					if (id_names.contains(column)
+							|| "serialVersionUID".equals(column)) { // 传入主键名称
+						continue;
+					}
+					// args[i] = fields[i].get(entity);
+					argLlist.add(fields[i].get(entity));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			// 打印参数
+			StringBuffer argsString = new StringBuffer();
+			argsString.append("参数：");
+			for (Object oj : argLlist) {
+				if (oj == null)
+					argsString.append("null,");
+				else
+					argsString.append(oj.toString() + ",");
+			}
+			argsString = argsString.deleteCharAt(argsString.length() - 1);
+			System.out.println(argsString);
+
+			return argLlist.toArray();
+		} else if (sqlFlag.equals(SQL_UPDATE)) {
+			ArrayList<Object> argLlist = new ArrayList<Object>();
+			int length = fields.length;
+			// Object[] tempArr = new Object[fields.length];
+			// for (int i = 0; length > 0 && i < length; i++) {
+			// try {
+			// fields[i].setAccessible(true); // 暴力反射
+			// // tempArr[i] = fields[i].get(entity);
+			// String column = fields[i].getName();
+			// if (column.equals(id_name)
+			// || "serialVersionUID".equals(column)) { // 传入主键名称
+			// continue;
+			// }
+			// argLlist.add(fields[i].get(entity));
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
+			// }
+			//
+			Object temp_idvalue = new Object();
+			for (int i = 0; length > 0 && i < length; i++) {
+				try {/*
+					 * fields[i].setAccessible(true); // 暴力反射 String column =
+					 * fields[i].getName(); if
+					 * ("serialVersionUID".equals(column)) continue;
+					 * 
+					 * if (column.equals(id_name)) temp_idvalue =
+					 * fields[i].get(entity);
+					 * 
+					 * argLlist.add(fields[i].get(entity));
+					 */
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			argLlist.add(temp_idvalue);
+
+			// 打印参数
+			StringBuffer argsString = new StringBuffer();
+			argsString.append("参数：");
+			for (Object oj : argLlist) {
+				if (oj == null)
+					argsString.append("null,");
+				else
+					argsString.append(oj.toString() + ",");
+			}
+			argsString = argsString.deleteCharAt(argsString.length() - 1);
+
+			System.out.println(argsString);
+
+			return argLlist.toArray();
+		} else if (sqlFlag.equals(SQL_DELETE)) {/*
+												 * Object[] args = new
+												 * Object[1]; // 长度是1 int length
+												 * = fields.length; for (int i =
+												 * 0; length > 0 && i < length;
+												 * i++) { try {
+												 * fields[i].setAccessible
+												 * (true); // 暴力反射 String column
+												 * = fields[i].getName(); if
+												 * (column.equals(id_name)) { //
+												 * 传入主键名称 args[0] =
+												 * fields[i].get(entity); break;
+												 * } } catch (Exception e) {
+												 * e.printStackTrace(); } }
+												 * 
+												 * StringBuffer argsString = new
+												 * StringBuffer();
+												 * argsString.append("参数："); for
+												 * (Object oj : args) { if (oj
+												 * == null)
+												 * argsString.append("null,");
+												 * else
+												 * argsString.append(oj.toString
+												 * () + ","); } argsString =
+												 * argsString
+												 * .deleteCharAt(argsString
+												 * .length() - 1);
+												 * System.out.println
+												 * (argsString); return args;
+												 */
 		}
 		return null;
 
@@ -633,7 +836,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		argsString = argsString.deleteCharAt(argsString.length() - 1);
 		System.out.println(argsString);
 		RowMapper<T> rowMapper = BeanPropertyRowMapper.newInstance(entityClass);
-		return jdbcTemplate.query(sql.toString(), args, rowMapper);
+		 List<T> aa= jdbcTemplate.query(sql.toString(), args, rowMapper);
+		 return aa;
 	}
 
 	private int normalCount(String findsql, ArrayList<Object> param) {

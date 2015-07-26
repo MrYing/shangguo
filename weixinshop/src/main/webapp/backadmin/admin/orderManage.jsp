@@ -23,14 +23,6 @@
 		});
 	}
 
-	function formatUserId(val, row) {
-		return row.user.id;
-	}
-
-	function formatUserName(val, row) {
-		return row.user.userName;
-	}
-
 	function formatStatus(val, row) {
 		if (val == 1) {
 			return "待审核";
@@ -44,8 +36,8 @@
 		return "";
 	}
 
-
 	function openOrderDetailDialog() {
+		/* var url="order_findListByOrderId.do" */
 		var selectedRows = $("#dg").datagrid('getSelections');
 		if (selectedRows.length != 1) {
 			$.messager.alert("系统提示", "请选择一条要查看的数据！");
@@ -53,12 +45,13 @@
 		}
 		var row = selectedRows[0];
 		$("#dg2").datagrid('load', {
-			"id" : row.id
+			/* url : url, */
+			"order_id" : row.order_id
 		});
-		$("#orderNo").val(row.orderNo);
-		$("#user").val(row.user.userName + "(ID:" + row.user.id + ")");
-		$("#cost").val(row.cost + "(元)");
-		var v = row.status;
+		$("#orderId").val(row.order_id);
+		$("#user").val(row.user_id);
+		$("#cost").val(row.monny + "(元)");
+		var v = row.order_status;
 		if (v == 1) {
 			$("#status").val("待审核");
 		} else if (v == 2) {
@@ -83,17 +76,17 @@
 		}
 		var orderNosStr = [];
 		for ( var i = 0; i < selectedRows.length; i++) {
-			orderNosStr.push(selectedRows[i].orderNo);
+			orderNosStr.push(selectedRows[i].order_id);
 		}
 		var orderNos = orderNosStr.join(",");
 		$.messager.confirm("系统提示", "您确认要处理这<font color=red>"
 				+ selectedRows.length + "</font>条数据吗？", function(r) {
 			if (r) {
-				$.post("order_modifyOrderStatus.action", {
+				$.post("order_modifyOrderStatus.do", {
 					orderNos : orderNos,
 					status : status
-				}, function(result) {
-					if (result.success) {
+				}, function(results) {
+					if (results[0].success) {
 						$.messager.alert("系统提示", "数据已成功处理！");
 						$("#dg").datagrid("reload");
 					} else {
@@ -114,7 +107,8 @@
 				<th field="cb" checkbox="true" align="center"></th>
 				<th field="order_id" width="50" align="center">订单编号</th>
 				<th field="user_id" width="50" align="center">用户编号</th>
-				<th field="order_status" width="50" align="center">订单状态</th>
+				<th field="order_status" width="50" align="center"
+					formatter="formatStatus">订单状态</th>
 				<th field="order_time" width="50" align="center">下单时间</th>
 				<th field="pay_type" width="50" align="center">支付方式</th>
 				<th field="carry_type" width="50" align="center">送货方式</th>
@@ -153,7 +147,7 @@
 		<table cellspacing="8px">
 			<tr>
 				<td>订单号：</td>
-				<td><input type="text" id="orderNo" readonly="readonly" /></td>
+				<td><input type="text" id="orderId" readonly="readonly" /></td>
 				<td>&nbsp;</td>
 				<td>订单人：</td>
 				<td><input type="text" id="user" readonly="readonly" /></td>
@@ -172,7 +166,6 @@
 			fit="true">
 			<thead>
 				<tr>
-					<th field="cb" checkbox="true" align="center"></th>
 					<th field="order_id" width="100" align="center">订单编号</th>
 					<th field="good_id" width="100" align="center">商品编号</th>
 					<th field="good_name" width="100" align="center">商品名称</th>
