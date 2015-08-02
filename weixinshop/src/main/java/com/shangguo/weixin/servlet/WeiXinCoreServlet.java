@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.shangguo.util.DateUtil;
 import com.shangguo.weixin.service.WeiXinCoreService;
 import com.shangguo.weixin.util.SignUtil;
 
@@ -34,12 +35,11 @@ public class WeiXinCoreServlet extends HttpServlet {
 		String nonce = request.getParameter("nonce");
 		// 随机字符串
 		String echostr = request.getParameter("echostr");
-
 		PrintWriter out = response.getWriter();
 		// 请求校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
 		if (SignUtil.checkSignature(signature, timestamp, nonce)) {
 			out.print(echostr);
-			
+			logger.info("请求校验成功！");
 		}else{
 			logger.info("请求校验失败！");
 		}

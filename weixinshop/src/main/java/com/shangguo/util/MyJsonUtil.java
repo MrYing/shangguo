@@ -1,9 +1,11 @@
 package com.shangguo.util;
 
 import java.text.DecimalFormat;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 
@@ -143,4 +145,29 @@ public class MyJsonUtil {
 	 * jsonString.append(jsonarray.toString()).append("}"); return
 	 * jsonString.toString(); }
 	 */
+	@SuppressWarnings("unchecked")
+	public static Object getValue(String jsonData, String key1, String key2, String key3){
+		JSONObject jsonObject = JSONObject.fromObject(jsonData);
+		if(key2 == null || key3 == null){
+			return jsonObject.get(key1);
+		}
+		if(key1 != null && key2 != null){
+			JSONArray jsonArray = jsonObject.getJSONArray(key1);
+			Iterator<JSONObject>  it = jsonArray.iterator();
+			while(it.hasNext()){
+				JSONObject json = it.next();
+				if(key3 == null){
+				    return json.get("key2");
+				}else{
+					JSONObject json3 = json.getJSONObject(key2);
+					return json3.get(key3);
+				}
+				
+			}
+			
+		}
+		return null;
+	}
+	
+	
 }

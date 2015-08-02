@@ -232,7 +232,7 @@
 	</div>
 
 	<div id="dlg" class="easyui-dialog"
-		style="width: 800px; height: 600px; padding: 10px 20px" closed="true"
+		style="width: 600px; height: 400px; padding: 10px 20px" closed="true"
 		buttons="#dlg-buttons">
 		<form id="fm" method="post" enctype="multipart/form-data">
 			<table cellspacing="5px">

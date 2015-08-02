@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import com.shangguo.service.user.UserInfoService;
 import com.shangguo.weixin.message.Article;
 import com.shangguo.weixin.message.NewsMessage;
 import com.shangguo.weixin.message.TextMessage;
+import com.shangguo.weixin.util.CommonUtil;
 import com.shangguo.weixin.util.MessageUtil;
-import com.shangguo.weixin.util.ProjectRootPath;
 
 /**
  * 核心服务类
@@ -122,17 +123,25 @@ public class WeiXinCoreService {
 			} else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
 				String eventType = requestMap.get("Event");
 				if(eventType.equals(MessageUtil.REQ_EVENT_TYPE_SUBSCRIBE)){
-					tm.setContent("欢饮您关注，我们将用心为您服务");
+					UserInfoService userBaseInfo = new UserInfoService();
+					boolean isUserExsits = userBaseInfo.saveUserBaseInfo(fromUserName);
+					if(isUserExsits){
+						tm.setContent("欢迎您再次关注我们，我们将用心为你服务");
+					}else{
+						tm.setContent("欢迎您关注，我们将用心为您服务");
+					}
 				}else if(eventType.equals(MessageUtil.REQ_EVENT_TYPE_UNSUBSCRIBE)){
 					
+					System.out.println("该用户已取消关注！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！");
+					System.out.println(fromUserName);
 				}
 			}
 			respXml = MessageUtil.messageToXml(tm);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(respXml);
 		return respXml;
 	}
 }

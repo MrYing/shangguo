@@ -50,7 +50,7 @@
 		<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
 		
-		    <!-- 配置数据源 -->
+		<!-- 配置数据源 -->
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close" 
 		p:driverClassName="com.mysql.jdbc.Driver"

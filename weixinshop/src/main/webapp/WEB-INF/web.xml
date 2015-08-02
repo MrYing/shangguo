@@ -29,8 +29,29 @@
 	<servlet-mapping>
 		<!-- 映射路径，不要写成了/*那样会拦截所有的访问，连JSP页面都访问不了 -->
 		<servlet-name>pagecontroller</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>weixinCoreServlet</servlet-name>
+		<servlet-class>
+			com.shangguo.weixin.servlet.WeiXinCoreServlet
+		</servlet-class>
+	</servlet>
+
+	<!-- /coreServlet用于指定该Servlet的访问路径 -->
+	<servlet-mapping>
+		<servlet-name>weixinCoreServlet</servlet-name>
+		<url-pattern>/weixinCoreServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>initServlet</servlet-name>
+		<servlet-class>
+			com.shangguo.servlet.InitServlet
+		</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
 	
 	<filter>    
 	  <filter-name>UsersFilter</filter-name>    

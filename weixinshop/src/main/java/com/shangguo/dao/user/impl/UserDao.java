@@ -1,5 +1,6 @@
 package com.shangguo.dao.user.impl;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,23 @@ public class UserDao extends BaseDaoImpl<T_user> implements IUserDao {
 		return super.findById(id, id_name);
 	}
 
+	/**根据openID查询用户信息
+	 * @return
+	 */
+	public boolean isExistsOpenId(String OpenId){
+		boolean isExists = false;
+		String sql = "select * from t_user where openID=?";
+		ArrayList<Object> param = new ArrayList<Object>();
+		List<T_user> userList = new ArrayList<T_user>();
+		param.add(OpenId);
+		userList = query(sql, param);
+		userList.isEmpty();
+		if(!userList.isEmpty()){
+			isExists = true;
+		}
+		return isExists;
+		
+	}
 	public List<T_user> findAll() {
 		return super.findAll();
 	}

@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import com.shangguo.util.PropertiesUtil;
+
 /**
  * 请求校验工具类
  * 
@@ -12,7 +14,7 @@ import java.util.Arrays;
  */
 public class SignUtil {
 	// 与开发模式接口配置信息中的Token保持一致
-	private static String token = "shangguo1";
+	private static String token = PropertiesUtil.readProperties("weixinInterface.properties").getProperty("token");
 
 	/**
 	 * 校验签名

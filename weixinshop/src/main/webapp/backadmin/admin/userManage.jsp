@@ -88,13 +88,12 @@
 		$("#dlg").dialog("open").dialog("setTitle","编辑用户信息");
 		$("#trueName").val(row.trueName);
 		$("#userName").val(row.userName);
-		$("#password").val(row.password);
+		$("#join_time").val(row.join_time);
 		$("#sex").combobox("setValue",row.sex);
-		$("#birthday").datebox("setValue",row.birthday);
-		$("#dentityCode").val(row.dentityCode);
-		$("#email").val(row.email);
 		$("#mobile").val(row.mobile);
 		$("#address").val(row.address);
+		$("#openID").val(row.openID);
+		$("#unionID").val(row.unionID);
 		url="user_saveUser.action?user.id="+row.id;
 	}
 	
@@ -119,20 +118,20 @@
 <body style="margin:1px;">
 	<table id="dg" title="用户管理" class="easyui-datagrid"
 	 fitColumns="true" pagination="true" rownumbers="true"
-	 url="user_list.action" fit="true" toolbar="#tb">
+	 url="user_show.do" fit="true" toolbar="#tb">
 	 <thead>
 	 	<tr>
 	 		<th field="cb" checkbox="true" align="center"></th>
-	 		<th field="id" width="50" align="center">编号</th>
-	 		<th field="trueName" width="100" align="center">真实姓名</th>
-	 		<th field="userName" width="100" align="center">用户名</th>
-	 		<th field="password" width="100" align="center">密码</th>
-	 		<th field="sex" width="50" align="center">性别</th>
-	 		<th field="birthday" width="100" align="center">出生日期</th>
-	 		<th field="dentityCode" width="150" align="center">身份证</th>
-	 		<th field="email" width="100" align="center">邮件</th>
-	 		<th field="mobile" width="100" align="center">联系电话</th>
-	 		<th field="address" width="100" align="center">收货地址</th>
+	 		<th field="user_id" width="50" align="center">编号</th>
+	 		<th field="user_name" width="100" align="center">真实姓名</th>
+	 		<th field="user_nickname" width="100" align="center">用户名</th>
+	 		<th field="phone" width="100" align="center">联系电话</th>
+	 		<th field="gender" width="50" align="center">性别</th>
+	 		<th field="address" width="100" align="center">地区</th>
+	 		<th field="join_time" width="100" align="center">关注时间</th>
+	 		<th field="score" width="50" align="center">积分</th>
+	 		<th field="openID" width="100" align="center">openID</th>
+	 		<th field="unionID" width="100" align="center">unionID</th>
 	 	</tr>
 	 </thead>
 	</table>
@@ -147,7 +146,7 @@
 			<a href="javascript:searchUser()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
 		</div>
 	</div>
-	
+	<!--添加用户信息对话窗  -->
 	<div id="dlg" class="easyui-dialog" style="width: 570px;height:300px;padding: 10px 20px"
 	  closed="true" buttons="#dlg-buttons">
 	 	<form id="fm" method="post">
@@ -160,8 +159,6 @@
 	 				<td><input type="text" id="userName" name="user.userName" class="easyui-validatebox" required="true"/></td>
 	 			</tr>
 	 			<tr>
-	 				<td>密码：</td>
-	 				<td><input type="text" id="password" name="user.password" class="easyui-validatebox" required="true"/></td>
 	 				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	 				<td>性别：</td>
 	 				<td>
@@ -171,13 +168,6 @@
 	 						<option value="女">女</option>
 	 					</select>
 	 				</td>
-	 			</tr>
-	 			<tr>
-	 				<td>出生日期：</td>
-	 				<td><input type="text" id="birthday" name="user.birthday" class="easyui-datebox" editable="false" required="true"/></td>
-	 				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	 				<td>身份证：</td>
-	 				<td><input type="text" id="dentityCode" name="user.dentityCode" class="easyui-validatebox" required="true"/></td>
 	 			</tr>
 	 			<tr>
 	 				<td>邮件：</td>

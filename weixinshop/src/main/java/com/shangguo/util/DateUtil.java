@@ -764,9 +764,26 @@ public class DateUtil {
 				+ date.getTime();
 		return timestamp;
 	}
+	
+	public static Date timestamp2Date(String timestamp){
+		SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+		Date date = null;
+		 Long time=new Long(timestamp + "000");
+
+		 String d = format.format(time);
+
+		 try {
+			date=format.parse(d);
+		} catch (ParseException e) {
+			logger.info("时间戳转换成Date出错");
+		}
+		return date;
+		
+	}
 
 	public static void main(String[] args) {
 		System.out
 				.println(getYear() + "|" + getMonth() + "|" + getStringDate());
+		System.out.println(timestamp2Date("1437370290"));
 	}
 }

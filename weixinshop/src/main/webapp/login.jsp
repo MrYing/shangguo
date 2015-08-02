@@ -45,7 +45,7 @@
 		<em class="corner rt"></em>
 		<div class="box">
 			<h1>管理员登陆</h1>
-			<form id="loginForm" method="post" action="adminlogin/submit">
+			<form id="loginForm" method="post" action="adminlogin/submit.do">
 				<table>
 					<tr>
 						<td class="field">用户名：</td>

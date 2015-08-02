@@ -2,6 +2,7 @@ package com.shangguo.weixin.util;
 
 import net.sf.json.JSONObject;
 
+import com.shangguo.weixin.accessToke.AccessToken;
 import com.shangguo.weixin.menu.BaseButton;
 import com.shangguo.weixin.menu.ComplexButton;
 import com.shangguo.weixin.menu.Menu;
@@ -18,8 +19,9 @@ public class MenuUtil {
     public final static String appsecret = "63b8f49e77e95ffdab3baac9615a0c14";*/
     
     public static boolean createMenu(){
+    	AccessToken accessToken = new AccessToken();
     	boolean result = false;
-    	String access_token = CommonUtil.getAccessToken();
+    	String access_token = accessToken.getAccess_token();
     	String requestUrl = urlMode.replace("ACCESS_TOKEN", access_token);
     	
         ViewButton viewButton = new ViewButton();
