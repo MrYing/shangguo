@@ -164,7 +164,7 @@ CREATE TABLE t_orderlist
 (
    order_id             INT(10) NOT NULL COMMENT '订单编号',
    good_id              INT(10) NOT NULL COMMENT '商品编号',
-   good_name            DECIMAL(5,2) DEFAULT 0 COMMENT '商品名称',
+   good_name            VARCHAR(128)  COMMENT '商品名称',
    original_price       DECIMAL(5,2) DEFAULT 0 COMMENT '商品原价',
    present_price        DECIMAL(5,2) DEFAULT 0 COMMENT '商品现价',
    order_price          DECIMAL(5,2) DEFAULT 0 COMMENT '商品预定价',
@@ -199,5 +199,6 @@ ALTER TABLE t_orderlist ADD CONSTRAINT FK_Reference_order FOREIGN KEY (order_id)
       REFERENCES t_order (order_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
-ALTER TABLE `t_user`  ADD COLUMN `openID` VARCHAR(64) ; 
-ALTER TABLE `t_user`  ADD COLUMN `unionID` VARCHAR(64) ; 
+ALTER TABLE 't_user'  ADD COLUMN 'openID' VARCHAR(64) ; 
+ALTER TABLE 't_user'  ADD COLUMN 'unionID' VARCHAR(64) ; 
+ALTER TABLE 't_orderlist'  ALTER COLUMN 'good_name' VARCHAR(64) ; 
