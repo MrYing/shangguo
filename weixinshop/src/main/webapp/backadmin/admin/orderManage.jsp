@@ -179,17 +179,6 @@
 
 <body style="margin: 1px;">
 
-	<div id='page1'
-		style='background: #ffffff; margin: 10; width: 270; height: 450; float: left'>
-		<table id="print_table">
-		</table>
-	</div>
-	<div id='page2'
-		style='background: #ffffff; margin: 10; width: 270; height: 450; float: left'>发票2
-		金额:100</div>
-
-	<input type="button" value="打印" onClick='test()'>
-
 	<table id="dg" title="订单管理" class="easyui-datagrid" fitColumns="true"
 		pagination="true" rownumbers="true" url="order_search.do" fit="true"
 		toolbar="#tb">
@@ -223,7 +212,7 @@
 				iconCls="icon-shenhe" plain="true">审核通过</a> <a
 				href="javascript:modifyOrderStatus(3)" class="easyui-linkbutton"
 				iconCls="icon-fahuo" plain="true">卖家已发货</a> <a
-				href="javascript:dataPrint()" class="easyui-linkbutton"
+				href="javascript:test()" class="easyui-linkbutton"
 				iconCls="icon-fahuo" plain="true">打印小票</a>
 		</div>
 		<div>
@@ -276,5 +265,12 @@
 		<a href="javascript:closeOrderDetailDialog()"
 			class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
 	</div>
+	
+	<div id='page1'
+		style=' margin: 10; width: 270; height: 450; float: left'>
+		<table id="print_table">
+		</table>
+	</div>
+	
 </body>
 </html>
