@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.shangguo.dao.base.BaseDaoImpl;
 import com.shangguo.dao.base.QueryResult;
 import com.shangguo.dao.order.IOrderListDao;
-import com.shangguo.model.goods.T_GOODS;
 import com.shangguo.model.order.T_orderlist;
 
 public class OrderListDao extends BaseDaoImpl<T_orderlist> implements
@@ -57,5 +56,23 @@ public class OrderListDao extends BaseDaoImpl<T_orderlist> implements
 		String sql = "select  * from t_orderlist where order_id=?";
 		param.add(orderId);
 		return super.findByPage(0, 0, sql, param);
+	}
+
+	public QueryResult<T_orderlist> findByOrderIds(int[] orderId) {
+		ArrayList<Object> param = new ArrayList<Object>();
+		StringBuilder sql = new StringBuilder(
+				"select  * from t_orderlist where order_id in (");
+		for (int id : orderId) {
+			sql.append("?,");
+		}
+		sql = sql.deleteCharAt(sql.length() - 1);
+		sql.append(") ");
+
+		int length = orderId.length;
+		for (int i = 0; i < length; i++) {
+			param.add(orderId[i]);
+		}
+
+		return super.findByPage(0, 0, sql.toString(), param);
 	}
 }

@@ -5,6 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<OBJECT ID="jatoolsPrinter"
+	CLASSID="CLSID:B43D3361-D075-4BE2-87FE-057188254255"
+	codebase="jatoolsPrinter.cab#version=5,7,0,0"></OBJECT>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css"
@@ -96,9 +99,97 @@
 			}
 		});
 	}
+
+	function test() {
+		var selectedRows = $("#dg").datagrid('getSelections');
+		if (selectedRows.length == 0) {
+			$.messager.alert("系统提示", "请选择要打印的数据！");
+			return;
+		}
+		var strIds = [];
+		for ( var i = 0; i < selectedRows.length; i++) {
+			strIds.push(selectedRows[i].order_id);
+		}
+		var ids = strIds.join(",");
+		$.messager.confirm("系统提示", "您确认要打印这<font color=red>"
+				+ selectedRows.length + "</font>条数据吗？", function(r) {
+			if (r) {
+				$.post("order_print.do", {
+					ids : ids
+				}, function(result) {
+					$("#print_table").html("");
+					for ( var obj in result) {
+
+						var html = "<tr><td>" + "名称" + "</td><td>" + "单价"
+								+ "</td><td>" + "数量" + "</td><td>" + "小计"
+								+ "</td></tr>";
+						var rowObject = result[obj].list;
+						for ( var row in rowObject) {
+
+							var tr = "<tr><td>" + rowObject[row].good_name
+									+ "</td><td>"
+									+ rowObject[row].present_price
+									+ "</td><td>" + rowObject[row].buy_count
+									+ "</td><td>" + rowObject[row].money
+									+ "</td></tr>"								
+									;
+							html += tr;
+
+						}
+						html +="<tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/>";
+						html +="<tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/><tr/>";
+						$("#print_table").append(html);
+					}
+
+					doPrint();
+					/* 					$("#print_table").html("");
+					 var html = "<tr><td>" + "名称" + "</td><td>" + "单价"
+					 + "</td><td>" + "数量" + "</td><td>" + "小计"
+					 + "</td></tr>";
+					 for ( var row in result.rows) {
+
+					 var tr = "<tr><td>" + result.rows[row].good_name
+					 + "</td><td>" + result.rows[row].present_price
+					 + "</td><td>" + result.rows[row].buy_count
+					 + "</td><td>" + result.rows[row].money
+					 + "</td></tr>";
+					 html += tr;
+
+					 }
+					 $("#print_table").append(html);
+					 doPrint(); */
+				}, "json");
+			}
+		});
+	}
+
+	function doPrint() {
+		myDoc = {
+			documents : document, // 要打印的div 对象在本文档中，控件将从本文档中的 id 为 'page1' 的div对象，
+			// 作为首页打印id 为'page2'的作为第二页打印            
+			copyrights : '杰创软件拥有版权  www.jatools.com' // 版权声明,必须   
+		};
+		jatoolsPrinter.print(myDoc, false); // 直接打印，不弹出打印机设置对话框 
+	}
 </script>
 </head>
+
+
+
+
 <body style="margin: 1px;">
+
+	<div id='page1'
+		style='background: #ffffff; margin: 10; width: 270; height: 450; float: left'>
+		<table id="print_table">
+		</table>
+	</div>
+	<div id='page2'
+		style='background: #ffffff; margin: 10; width: 270; height: 450; float: left'>发票2
+		金额:100</div>
+
+	<input type="button" value="打印" onClick='test()'>
+
 	<table id="dg" title="订单管理" class="easyui-datagrid" fitColumns="true"
 		pagination="true" rownumbers="true" url="order_search.do" fit="true"
 		toolbar="#tb">
@@ -131,7 +222,9 @@
 			<a href="javascript:modifyOrderStatus(2)" class="easyui-linkbutton"
 				iconCls="icon-shenhe" plain="true">审核通过</a> <a
 				href="javascript:modifyOrderStatus(3)" class="easyui-linkbutton"
-				iconCls="icon-fahuo" plain="true">卖家已发货</a>
+				iconCls="icon-fahuo" plain="true">卖家已发货</a> <a
+				href="javascript:dataPrint()" class="easyui-linkbutton"
+				iconCls="icon-fahuo" plain="true">打印小票</a>
 		</div>
 		<div>
 			&nbsp;订单号：&nbsp;<input type="text" id="order_id" size="20" />

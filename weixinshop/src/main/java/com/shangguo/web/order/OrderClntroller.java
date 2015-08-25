@@ -1,6 +1,7 @@
 package com.shangguo.web.order;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,13 +110,42 @@ public class OrderClntroller {
 		try {
 			// 调用服务
 			OrderService service = new OrderService();
-			int d=service.updateStutas(status, orderIds);
+			int d = service.updateStutas(status, orderIds);
 			result.put("success", true);
 		} catch (Exception e) {
 			result.put("error", e.toString());
 		}
 		String json = JSONArray.fromObject(result).toString();
 		response.getWriter().print(json);
+
+	}
+
+	@RequestMapping(value = "/order_print.do")
+	public void print(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+
+		// 设置请求的字符编码
+		request.setCharacterEncoding("UTF-8");
+		// 设置返回请求的字符编码
+		response.setCharacterEncoding("UTF-8");
+		String param=request.getParameter("ids");
+		String[] idArray = MyUtil.isNotEmpty(param) ? param.trim().split(",") : null;
+		int length = idArray.length;
+		int[] ids = new int[length];
+		for (int i = 0; i < length; i++) {
+			ids[i] = Integer.parseInt(idArray[i]);
+		}
+
+		try {
+			// 调用服务
+			OrderService service = new OrderService();
+			ArrayList<Object> result = service.findListByOrderId(ids);
+			String json = MyJsonUtil.toJson(result);
+			System.out.println(json);
+			response.getWriter().print(json);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 }

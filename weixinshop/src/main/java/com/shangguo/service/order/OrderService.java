@@ -1,5 +1,7 @@
 package com.shangguo.service.order;
 
+import java.util.ArrayList;
+
 import com.shangguo.dao.base.QueryResult;
 import com.shangguo.dao.order.impl.OrderDao;
 import com.shangguo.dao.order.impl.OrderListDao;
@@ -32,12 +34,24 @@ public class OrderService {
 	public QueryResult<T_orderlist> findListByOrderId(int order_id) {
 		return OrderListDao.findByOrderId(order_id);
 	}
-	
+
 	/**
 	 * 按订单Id查询订单详情
 	 * 
 	 */
-	public int updateStutas(int status,String [] orderIds) {
-		return dao.updateStatus(status,orderIds);
+	public ArrayList<Object> findListByOrderId(int[] order_ids) {
+		ArrayList<Object> result = new ArrayList<Object>();
+		for(int id :order_ids){
+			result.add(OrderListDao.findByOrderId(id));
+		}
+		return result;
+	}
+
+	/**
+	 * 按订单Id查询订单详情
+	 * 
+	 */
+	public int updateStutas(int status, String[] orderIds) {
+		return dao.updateStatus(status, orderIds);
 	}
 }
